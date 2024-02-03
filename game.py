@@ -29,7 +29,7 @@ while run:
     screen.fill(ESPRESSO)
     screen.blit(board, (0,0))
     screen.blit(surface, (0,0))
-    invisible_rect = battle_space_1.draw(surface)
+    battle_space_1.draw(surface)
     allied_1.draw(screen)
     allied_2.draw(screen)
 
@@ -53,8 +53,8 @@ while run:
 
         elif event.type == pygame.MOUSEBUTTONUP:
             moving = False
-            if allied_1.rect.collidepoint(invisible_rect.center):
-                allied_1.rect.center = invisible_rect.center
+            if allied_1.rect.collidepoint(battle_space_1.rect.center):
+                allied_1.rect.center = battle_space_1.rect.center
 
 
 
