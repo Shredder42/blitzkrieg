@@ -26,7 +26,7 @@ class BattleSpace:
 
     def draw(self, surface):
         # creates transparent rect
-        invisible_rect = pygame.draw.rect(surface, (255, 255, 255, 100), self.rect) 
+        invisible_rect = pygame.draw.rect(surface, (255, 255, 255, 0), self.rect) 
         return invisible_rect
 
 if __name__ == '__main__':

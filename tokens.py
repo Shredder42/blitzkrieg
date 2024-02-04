@@ -11,6 +11,9 @@ class AlliedToken:
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.original_x = x
+        self.original_y = y
+        self.moving = False
 
     def load_image(self):
         image = pygame.image.load(os.path.join('images', self.token_image))

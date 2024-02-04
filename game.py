@@ -21,36 +21,45 @@ clock = pygame.time.Clock()
 battle_space_1 = BattleSpace(196, 207, 'production', 'sea', 'west_europe', 1)
 allied_1 = AlliedToken('army', 1, 50, 800, 'allied_army_1.png')
 allied_2 = AlliedToken('navy', 2, 120, 800, 'allied_navy_2.png')
+allied_3 = AlliedToken('navy', 3, 190, 800, 'allied_navy_3.png')
+allied_4 = AlliedToken('airforce', 1, 260, 800, 'allied_airforce_1.png')
 
-def token_original_location(piece):
-    x = piece.rect.x
-    y = piece.rect.y
+def clicked_token(token):
+    if token.rect.collidepoint(pos):
+        print('clicked on token')
+        token.moving = True
+
+def move_token(token):
+    if token.moving:
+        token.rect.move_ip(event.rel)
+
+def token_original_location(token):
+    x = token.rect.x
+    y = token.rect.y
     return x, y
 
-def match_type_and_unit(piece, space):
-    # match = None
-    if (piece.unit == 'army' and space.type == 'land') or \
-    (piece.unit == 'navy' and space.type == 'sea') or \
-    piece.unit == 'airforce':
+def match_type_and_unit(token, space):
+    if (token.unit == 'army' and space.type in ('land', 'both')) or \
+    (token.unit == 'navy' and space.type in ('sea', 'both')) or \
+    token.unit == 'airforce':
         return True
 
     else:
         return False
 
-def place_piece(x, y, piece, space):
-    if match_type_and_unit(piece, space):
-        if piece.rect.collidepoint(space.rect.center):
-            piece.rect.center = space.rect.center
-        else:
-            piece.rect.x = x
-            piece.rect.y = y 
+def place_token(original_x, original_y, token, space):
+    if token.moving:
+        if (match_type_and_unit(token, space)) and (token.rect.collidepoint(space.rect.center) and not space.occupied):
+                token.rect.center = space.rect.center
+                space.occupied = True
 
-    else:
-        piece.rect.x = x
-        piece.rect.y = y 
+        else:
+            token.rect.x = original_x
+            token.rect.y = original_y
+
+        token.moving = False 
 
            
-
 
 
 # def main():
@@ -63,6 +72,8 @@ while run:
     battle_space_1.draw(surface)
     allied_1.draw(screen)
     allied_2.draw(screen)
+    allied_3.draw(screen)
+    allied_4.draw(screen)
 
 
     for event in pygame.event.get():
@@ -72,24 +83,24 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             print(pos)
-            
-            if allied_2.rect.collidepoint(pos):
-                print('clicked on tile')
-        #         # print(tile1.rect)
-                moving = True
-                original_x, original_y = token_original_location(allied_2)
 
-            
+            clicked_token(allied_1)
+            clicked_token(allied_2)
+            clicked_token(allied_3)
+            clicked_token(allied_4)
+         
         elif event.type == pygame.MOUSEMOTION:
-            if moving:
-                allied_2.rect.move_ip(event.rel)
+            move_token(allied_1)
+            move_token(allied_2)
+            move_token(allied_3)
+            move_token(allied_4)
+
 
         elif event.type == pygame.MOUSEBUTTONUP:
-            moving = False
-            place_piece(original_x, original_y, allied_2, battle_space_1)
-            # if allied_1.rect.collidepoint(battle_space_1.rect.center):
-            #     allied_1.rect.center = battle_space_1.rect.center
-
+            place_token(allied_1.original_x, allied_1.original_y, allied_1, battle_space_1)
+            place_token(allied_2.original_x, allied_2.original_y, allied_2, battle_space_1)
+            place_token(allied_3.original_x, allied_3.original_y, allied_3, battle_space_1)
+            place_token(allied_4.original_x, allied_4.original_y, allied_4, battle_space_1)
 
 
     pygame.display.flip()
