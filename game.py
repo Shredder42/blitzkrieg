@@ -18,9 +18,40 @@ board = pygame.transform.scale_by(board, 2)
 surface = pygame.Surface((1060, 1000), pygame.SRCALPHA) # need for creating transparent rect
 clock = pygame.time.Clock()
 
-battle_space_1 = BattleSpace(196, 207, 'production', 'west_europe', 1)
-allied_1 = AlliedToken(50, 800, 'allied_army_1.png', 1)
-allied_2 = AlliedToken(120, 800, 'allied_army_2.png', 2)
+battle_space_1 = BattleSpace(196, 207, 'production', 'sea', 'west_europe', 1)
+allied_1 = AlliedToken('army', 1, 50, 800, 'allied_army_1.png')
+allied_2 = AlliedToken('navy', 2, 120, 800, 'allied_navy_2.png')
+
+def token_original_location(piece):
+    x = piece.rect.x
+    y = piece.rect.y
+    return x, y
+
+def match_type_and_unit(piece, space):
+    # match = None
+    if (piece.unit == 'army' and space.type == 'land') or \
+    (piece.unit == 'navy' and space.type == 'sea') or \
+    piece.unit == 'airforce':
+        return True
+
+    else:
+        return False
+
+def place_piece(x, y, piece, space):
+    if match_type_and_unit(piece, space):
+        if piece.rect.collidepoint(space.rect.center):
+            piece.rect.center = space.rect.center
+        else:
+            piece.rect.x = x
+            piece.rect.y = y 
+
+    else:
+        piece.rect.x = x
+        piece.rect.y = y 
+
+           
+
+
 
 # def main():
 run = True
@@ -42,19 +73,22 @@ while run:
             pos = pygame.mouse.get_pos()
             print(pos)
             
-            if allied_1.rect.collidepoint(pos):
+            if allied_2.rect.collidepoint(pos):
                 print('clicked on tile')
         #         # print(tile1.rect)
                 moving = True
+                original_x, original_y = token_original_location(allied_2)
+
             
         elif event.type == pygame.MOUSEMOTION:
             if moving:
-                allied_1.rect.move_ip(event.rel)
+                allied_2.rect.move_ip(event.rel)
 
         elif event.type == pygame.MOUSEBUTTONUP:
             moving = False
-            if allied_1.rect.collidepoint(battle_space_1.rect.center):
-                allied_1.rect.center = battle_space_1.rect.center
+            place_piece(original_x, original_y, allied_2, battle_space_1)
+            # if allied_1.rect.collidepoint(battle_space_1.rect.center):
+            #     allied_1.rect.center = battle_space_1.rect.center
 
 
 

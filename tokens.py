@@ -3,10 +3,9 @@ import pygame
 
 class AlliedToken:
     ''' these are the game pieces'''
-    def __init__(self, x, y, token_image, value):
-        # self.x = x
-        # self.y = y
-        self.value = value
+    def __init__(self, unit, value, x, y, token_image):
+        self.unit = unit
+        self.value = value      
         self.token_image = token_image
         self.image = self.load_image()
         self.rect = self.image.get_rect()
@@ -23,7 +22,7 @@ class AlliedToken:
 
 
 if __name__ == '__main__':
-    token1 = AlliedToken(10, 10, 'allied_army_1.png', 1)
+    token1 = AlliedToken(10, 10, 'allied_army_1.png', 'army', 1)
         
 
         

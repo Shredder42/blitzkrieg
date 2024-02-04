@@ -14,9 +14,10 @@ types of battle spaces are:
 
 class BattleSpace:
     ''' these are the spaces on the game board '''
-    def __init__(self, x, y, type, theater, campaign):
+    def __init__(self, x, y, effect, type, theater, campaign):
         self.x = x
         self.y = y
+        self.effect = effect
         self.type = type
         self.theater = theater
         self.campaign = campaign
@@ -29,7 +30,7 @@ class BattleSpace:
         return invisible_rect
 
 if __name__ == '__main__':
-    space1 = BattleSpace(196, 207, 'production', 'west europe', 1)
+    space1 = BattleSpace(196, 207, 'production', 'sea', 'west europe', 1)
     print(space1.type)
     print(space1.rect)
 
