@@ -1,7 +1,7 @@
 import os
 import pygame
 from battle_spaces import BattleSpace
-from tokens import AlliedToken
+from tokens import Token
 
 pygame.init()
 pygame.font.init()
@@ -19,47 +19,10 @@ surface = pygame.Surface((1060, 1000), pygame.SRCALPHA) # need for creating tran
 clock = pygame.time.Clock()
 
 battle_space_1 = BattleSpace(196, 207, 'production', 'sea', 'west_europe', 1)
-allied_1 = AlliedToken('army', 1, 50, 800, 'allied_army_1.png')
-allied_2 = AlliedToken('navy', 2, 120, 800, 'allied_navy_2.png')
-allied_3 = AlliedToken('navy', 3, 190, 800, 'allied_navy_3.png')
-allied_4 = AlliedToken('airforce', 1, 260, 800, 'allied_airforce_1.png')
-
-# def clicked_token(token):
-#     if token.rect.collidepoint(pos):
-#         print('clicked on token')
-#         token.moving = True
-
-# def move_token(token):
-#     if token.moving:
-#         token.rect.move_ip(event.rel)
-
-# def token_original_location(token):
-#     x = token.rect.x
-#     y = token.rect.y
-#     return x, y
-
-# def match_type_and_unit(token, space):
-#     if (token.unit == 'army' and space.type in ('land', 'both')) or \
-#     (token.unit == 'navy' and space.type in ('sea', 'both')) or \
-#     token.unit == 'airforce':
-#         return True
-
-#     else:
-#         return False
-
-# def place_token(original_x, original_y, token, space):
-#     if token.moving:
-#         if (match_type_and_unit(token, space)) and (token.rect.collidepoint(space.rect.center) and not space.occupied):
-#                 token.rect.center = space.rect.center
-#                 space.occupied = True
-
-#         else:
-#             token.rect.x = original_x
-#             token.rect.y = original_y
-
-#         token.moving = False 
-
-           
+allied_1 = Token('allied', 'army', 1, 50, 800, 'allied_army_1.png')
+allied_2 = Token('allied', 'navy', 2, 120, 800, 'allied_navy_2.png')
+allied_3 = Token('allied', 'navy', 3, 190, 800, 'allied_navy_3.png')
+allied_4 = Token('allied', 'airforce', 1, 260, 800, 'allied_airforce_1.png')
 
 
 def main():
