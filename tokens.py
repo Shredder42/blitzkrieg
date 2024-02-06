@@ -4,7 +4,7 @@ import pygame
 
 class Token:
     ''' these are the game pieces'''
-    need to deal with the initial rect values
+    # need to deal with the initial rect values
     def __init__(self, side, unit, value, x, y, token_image):
         self.side = side
         self.unit = unit

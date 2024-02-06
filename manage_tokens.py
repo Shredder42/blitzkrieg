@@ -31,20 +31,21 @@ class TokenBag:
         token_bag.append(Token('allied', 'navy', 2, 0, 0, 'allied_navy_2.png'))
         token_bag.append(Token('allied', 'navy', 3, 0, 0, 'allied_navy_3.png'))
         token_bag.append(Token('allied', 'navy', 3, 0, 0, 'allied_navy_3.png'))
-        token_bag.append(Token('general', 'army', 1, 0, 0, 'allied_general.png'))
-        token_bag.append(Token('admiral', 'navy', 1, 0, 0, 'allied_admiral.png'))
+        token_bag.append(Token('allied', 'army', 1, 0, 0, 'allied_general.png'))
+        token_bag.append(Token('allied', 'navy', 1, 0, 0, 'allied_admiral.png'))
         random.shuffle(token_bag)
         return token_bag
 
 
 class PlayerHand:
-    def __init__(self):
-        self.hand_list = self.draw_starting_hand(bag.allied_token_bag)
+    def __init__(self, bag):
+        self.bag = bag
+        self.hand_list = self.draw_starting_hand()
 
-    def draw_starting_hand(self, bag):
+    def draw_starting_hand(self):
         hand_list = []
         for i in range(5):
-            hand_list.append(bag.pop())
+            hand_list.append(self.bag.pop())
         return hand_list
 
 
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     print(len(bag.allied_token_bag))
     print(bag.allied_token_bag[0].unit)
 
-    hand = PlayerHand()
+    hand = PlayerHand(bag.allied_token_bag)
     for token in hand.hand_list:
         print(f'{token.unit} value {token.value}')
 
