@@ -60,7 +60,7 @@ class GameBoard:
         spaces.append(BattleSpace(235, 537, 'strategic', 2, 'sea', 'pacific', 2)) 
         spaces.append(BattleSpace(297, 537, 'blank', 0, 'sea', 'pacific', 2)) 
         spaces.append(BattleSpace(111, 599, 'bombing', 1, 'sea', 'pacific', 3)) 
-        spaces.append(BattleSpace(173, 599, 'propaganda', 2, 'sea', 'pacific', 3)) 
+        spaces.append(BattleSpace(173, 599, 'propaganda', 2, 'both', 'pacific', 3)) 
         spaces.append(BattleSpace(235, 599, 'blank', 0, 'both', 'pacific', 3))
         spaces.append(BattleSpace(669, 139, 'tactical', 1, 'land', 'east_europe', 1))
         spaces.append(BattleSpace(731, 139, 'production', 1, 'land', 'east_europe', 1))  

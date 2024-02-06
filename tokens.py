@@ -5,17 +5,17 @@ import pygame
 class Token:
     ''' these are the game pieces'''
     # need to deal with the initial rect values
-    def __init__(self, side, unit, value, x, y, token_image):
+    def __init__(self, side, unit, value, token_image):
         self.side = side
         self.unit = unit
         self.value = value      
         self.token_image = token_image
         self.image = self.load_image()
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.original_x = x
-        self.original_y = y
+        self.rect.x = 0
+        self.rect.y = 0
+        self.original_x = None
+        self.original_y = None
         self.moving = False
 
     def load_image(self):
@@ -26,6 +26,12 @@ class Token:
     def draw(self, surface):
         return surface.blit(self.image, self.rect)
     
+    def token_starting_location(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
+        self.original_x = x
+        self.original_y = y
+   
     def clicked_token(self, pos):
         if self.rect.collidepoint(pos):
             print('clicked on token')
@@ -44,11 +50,13 @@ class Token:
         else:
             return False
 
-    def place_token(self, space):
+    def place_token(self, space_list):
         if self.moving:
-            if self.match_type_and_unit(space) and (self.rect.collidepoint(space.rect.center) and not space.occupied):
-                self.rect.center = space.rect.center
-                space.occupied = True
+            for space in space_list:
+                if (self.rect.collidepoint(space.rect.center) and not space.occupied) and self.match_type_and_unit(space):
+                    self.rect.center = space.rect.center
+                    space.occupied = True
+                    break
             else:
                 self.rect.x = self.original_x
                 self.rect.y = self.original_y
