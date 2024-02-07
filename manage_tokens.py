@@ -5,14 +5,13 @@ from tokens import Token
 class TokenBag:
     ''' token bag that holds the tokens to draw from '''
     def __init__(self):
-        self.allied_token_bag = self.create_token_bag()
-        self.axis_token_bag = None
+        self.allied_token_bag = self.create_allied_token_bag()
+        self.axis_token_bag = self.create_axis_token_bag()
         
 
-    def create_token_bag(self):
+    def create_allied_token_bag(self):
         token_bag = []
-        # need to deal with the initial rect values
-        token_bag.append(Token('allied', 'blitz', 0, 'allied_blitz.png'))
+        token_bag.append(Token('allied', 'blitz', 0, 'allied_blitz.png', True))
         token_bag.append(Token('allied', 'army', 1, 'allied_army_1.png'))
         token_bag.append(Token('allied', 'army', 1, 'allied_army_1.png'))
         token_bag.append(Token('allied', 'army', 1, 'allied_army_1.png'))
@@ -34,6 +33,33 @@ class TokenBag:
         token_bag.append(Token('allied', 'navy', 3, 'allied_navy_3.png'))
         token_bag.append(Token('allied', 'army', 1, 'allied_general.png'))
         token_bag.append(Token('allied', 'navy', 1, 'allied_admiral.png'))
+        random.shuffle(token_bag)
+        return token_bag
+    
+    def create_axis_token_bag(self):
+        token_bag = []
+        token_bag.append(Token('axis', 'blitz', 0, 'axis_blitz.png', True))
+        token_bag.append(Token('axis', 'army', 1, 'axis_army_1.png'))
+        token_bag.append(Token('axis', 'army', 1, 'axis_army_1.png'))
+        token_bag.append(Token('axis', 'army', 1, 'axis_army_1.png'))
+        token_bag.append(Token('axis', 'army', 2, 'axis_army_2.png'))
+        token_bag.append(Token('axis', 'army', 2, 'axis_army_2.png'))
+        token_bag.append(Token('axis', 'army', 3, 'axis_army_3.png'))
+        token_bag.append(Token('axis', 'army', 3, 'axis_army_3.png'))
+        token_bag.append(Token('axis', 'airforce', 1, 'axis_airforce_1.png'))
+        token_bag.append(Token('axis', 'airforce', 1, 'axis_airforce_1.png'))
+        token_bag.append(Token('axis', 'airforce', 1, 'axis_airforce_1.png'))
+        token_bag.append(Token('axis', 'airforce', 2, 'axis_airforce_2.png'))
+        token_bag.append(Token('axis', 'airforce', 2, 'axis_airforce_2.png'))
+        token_bag.append(Token('axis', 'navy', 1,'axis_navy_1.png'))
+        token_bag.append(Token('axis', 'navy', 1, 'axis_navy_1.png'))
+        token_bag.append(Token('axis', 'navy', 1, 'axis_navy_1.png'))
+        token_bag.append(Token('axis', 'navy', 2, 'axis_navy_2.png'))
+        token_bag.append(Token('axis', 'navy', 2, 'axis_navy_2.png'))
+        token_bag.append(Token('axis', 'navy', 3, 'axis_navy_3.png'))
+        token_bag.append(Token('axis', 'navy', 3, 'axis_navy_3.png'))
+        token_bag.append(Token('axis', 'army', 1, 'axis_general.png'))
+        token_bag.append(Token('axis', 'navy', 1, 'axis_admiral.png'))
         random.shuffle(token_bag)
         return token_bag
 

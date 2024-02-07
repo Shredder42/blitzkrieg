@@ -41,6 +41,8 @@ def main():
         screen.blit(surface, (0,0))
         for space in game_board.battle_spaces:
             space.draw(surface)
+        for token in game_board.placed_tokens:
+            token.draw(screen)
         # allied_1.draw(screen)
         # allied_2.draw(screen)
         # allied_3.draw(screen)
@@ -80,7 +82,7 @@ def main():
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])
                 for token in hand.hand_list:
-                    token.place_token(game_board.battle_spaces)
+                    token.place_token(game_board.battle_spaces, hand.hand_list, game_board.placed_tokens)
 
         pygame.display.flip()
 

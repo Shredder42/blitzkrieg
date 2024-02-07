@@ -41,6 +41,7 @@ class GameBoard:
     ''' initializes the battle spaces and puts them on the board '''
     def __init__(self):
         self.battle_spaces = self.create_battle_spaces()
+        self.placed_tokens = []
 
     def create_battle_spaces(self):
         spaces = []
