@@ -4,7 +4,6 @@ import pygame
 
 class Token:
     ''' these are the game pieces'''
-    # need to deal with the initial rect values
     def __init__(self, side, unit, value, token_image, blitz = False):
         self.side = side
         self.unit = unit
@@ -56,7 +55,9 @@ class Token:
     def place_token(self, space_list, hand_list, placed_tokens):
         if self.moving:
             for space in space_list:
-                if (self.rect.collidepoint(space.rect.center) and not space.occupied) and self.match_type_and_unit(space):
+                if self.rect.collidepoint(space.rect.center) and not \
+                space.occupied and space.theater.available and \
+                space.campaign.available and self.match_type_and_unit(space):
                     self.rect.center = space.rect.center
                     space.occupied = True
                     hand_list.remove(self)
