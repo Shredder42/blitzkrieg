@@ -63,6 +63,30 @@ class Token:
                     hand_list.remove(self)
                     self.placed = True
                     placed_tokens.append(self)
+                    # try to make this a function and careful with variable names
+                    camp = space.campaign.spaces
+                    occupied_list = []
+                    for item in camp:
+                        occupied_list.append(item.occupied)
+                    if all(occupied_list):
+                        print('All campaign spaces full')
+                        # print(camp)
+                        print(space.theater.campaigns)
+                        print(space.theater.campaigns.index(space.campaign))
+                        space.theater.campaigns[space.theater.campaigns.index(space.campaign) + 1].available = True
+                        # next_campaign = rank + 1
+                        # if space.theater.campaigns.rank
+                    else:
+                        print('campaign spaces available')
+                    # #     print(rank)
+                    # for campaign in space.theater.campaigns:
+                    #     if space.campaign == campaign:
+                    #         print(campaign.campaign)
+                    #         if all(campaign.spaces.occupied):
+                    #             print('All campaign spaces full')
+                    #             space.theater.campaigns.index[space.campaign + 1].available = True
+                    #         else:
+                    #             print('campaign spaces available')
                     break
             else:
                 self.rect.x = self.original_x

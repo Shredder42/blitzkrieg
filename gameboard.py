@@ -38,11 +38,54 @@ class BattleSpace:
 
 class Campaign:
     ''' manages campaigns and initializes battle spaces '''
-    def __init__(self):
-        self.available = True
+    def __init__(self, campaign, rank, available = False):
+        self.campaign = campaign
+        self.rank = rank
+        self.available = available
         self.complete = False
+        self.spaces = []
         # self.battle_spaces = self.create_battle_spaces2()
 
+    def add_spaces_to_campaign(self, game_board):
+        if self.campaign == 'northern_west_europe':
+            for space in game_board.battle_spaces[:3]:
+                self.spaces.append(space)
+        elif self.campaign == 'central_west_europe':
+            for space in game_board.battle_spaces[3:6]:
+                self.spaces.append(space)
+        elif self.campaign == 'southern_west_europe':
+            for space in game_board.battle_spaces[6:9]:
+                self.spaces.append(space)
+        elif self.campaign == 'northern_pacific':
+            for space in game_board.battle_spaces[9:11]:
+                self.spaces.append(space)
+        elif self.campaign == 'central_pacific':
+            for space in game_board.battle_spaces[11:15]:
+                self.spaces.append(space)
+        elif self.campaign == 'southern_pacific':
+            for space in game_board.battle_spaces[15:18]:
+                self.spaces.append(space)
+        elif self.campaign == 'northern_east_europe':
+            for space in game_board.battle_spaces[18:20]:
+                self.spaces.append(space)
+        elif self.campaign == 'central_east_europe':
+            for space in game_board.battle_spaces[20:23]:
+                self.spaces.append(space)
+        elif self.campaign == 'southern_east_europe':
+            for space in game_board.battle_spaces[23:28]:
+                self.spaces.append(space)
+        elif self.campaign == 'northern_africa':
+            for space in game_board.battle_spaces[28:32]:
+                self.spaces.append(space)
+        elif self.campaign == 'southern_africa':
+            for space in game_board.battle_spaces[32:35]:
+                self.spaces.append(space)
+        elif self.campaign == 'northern_asia':
+            for space in game_board.battle_spaces[35:38]:
+                self.spaces.append(space)
+        elif self.campaign == 'southern_asia':
+            for space in game_board.battle_spaces[38:]:
+                self.spaces.append(space)
     # def create_battle_spaces2(self):
     #     spaces = []
     #     if self.campaign == 'west_europe_1':
@@ -55,9 +98,35 @@ class Campaign:
 
 class Theater:
     '''manages theaters and initializes campaigns '''
-    def __init__(self):
+    def __init__(self, theater):
+        self.theater = theater
         self.available = True
         self.complete = False
+        self.campaigns = []
+
+    def add_campaigns_to_theater(self, campaigns):
+        if self.theater == 'west_europe':
+            campaign_list = [campaigns['northern_west_europe'], campaigns['central_west_europe'], campaigns['southern_west_europe']]
+            for campaign in campaign_list:
+                self.campaigns.append(campaign)
+        elif self.theater == 'pacific':
+            campaign_list = [campaigns['northern_pacific'], campaigns['central_pacific'], campaigns['southern_pacific']]
+            for campaign in campaign_list:
+                self.campaigns.append(campaign)
+        elif self.theater == 'east_europe':
+            campaign_list = [campaigns['northern_east_europe'], campaigns['central_east_europe'], campaigns['southern_east_europe']]
+            for campaign in campaign_list:
+                self.campaigns.append(campaign)
+        elif self.theater == 'africa':
+            campaign_list = [campaigns['northern_africa'], campaigns['southern_africa']]
+            for campaign in campaign_list:
+                self.campaigns.append(campaign)
+        elif self.theater == 'asia':
+            campaign_list = [campaigns['northern_asia'], campaigns['southern_asia']]
+            for campaign in campaign_list:
+                self.campaigns.append(campaign)
+
+
         # self.campaigns = self.create_campaigns()
 
     # def create_campaigns(self):
@@ -96,33 +165,33 @@ class GameBoard:
         spaces.append(BattleSpace(111, 537, 'imp_research', 2, 'sea', self.theaters['pacific'], self.campaigns['central_pacific'])) 
         spaces.append(BattleSpace(173, 537, 'production', 1, 'sea', self.theaters['pacific'], self.campaigns['central_pacific'])) 
         spaces.append(BattleSpace(235, 537, 'strategic', 2, 'sea', self.theaters['pacific'], self.campaigns['central_pacific'])) 
-        spaces.append(BattleSpace(297, 537, 'blank', 0, 'sea', self.theaters['pacific'], self.campaigns['central_pacific'])) 
-        spaces.append(BattleSpace(111, 599, 'bombing', 1, 'sea', self.theaters['pacific'], self.campaigns['northern_pacific'])) 
-        spaces.append(BattleSpace(173, 599, 'propaganda', 2, 'both', self.theaters['pacific'], self.campaigns['northern_pacific'])) 
-        spaces.append(BattleSpace(235, 599, 'blank', 0, 'both', self.theaters['pacific'], self.campaigns['northern_pacific']))
-        # spaces.append(BattleSpace(669, 139, 'tactical', 1, 'land', 'east_europe', 1))
-        # spaces.append(BattleSpace(731, 139, 'production', 1, 'land', 'east_europe', 1))  
-        # spaces.append(BattleSpace(669, 201, 'propaganda', 1, 'land', 'east_europe', 2))  
-        # spaces.append(BattleSpace(731, 201, 'imp_research', 2, 'land', 'east_europe', 2))  
-        # spaces.append(BattleSpace(793, 201, 'blank', 0, 'both', 'east_europe', 2))  
-        # spaces.append(BattleSpace(669, 263, 'bombing', 1, 'land', 'east_europe', 3))  
-        # spaces.append(BattleSpace(731, 263, 'tactical', 2, 'land', 'east_europe', 3))  
-        # spaces.append(BattleSpace(793, 263, 'strategic', 3, 'land', 'east_europe', 3))
-        # spaces.append(BattleSpace(855, 263, 'propaganda', 2, 'land', 'east_europe', 3))
-        # spaces.append(BattleSpace(917, 263, 'blank', 0, 'land', 'east_europe', 3))
-        # spaces.append(BattleSpace(579, 411, 'strategic', 3, 'land', 'africa', 1))
-        # spaces.append(BattleSpace(641, 411, 'tactical', 1, 'sea', 'africa', 1))
-        # spaces.append(BattleSpace(703, 411, 'research', 1, 'both', 'africa', 1))
-        # spaces.append(BattleSpace(765, 411, 'propaganda', 1, 'both', 'africa', 1))
-        # spaces.append(BattleSpace(579, 473, 'tactical', 2, 'land', 'africa', 2))
-        # spaces.append(BattleSpace(641, 473, 'imp_production', 2, 'sea', 'africa', 2))
-        # spaces.append(BattleSpace(703, 473, 'blank', 0, 'both', 'africa', 2))
-        # spaces.append(BattleSpace(725, 617, 'propaganda', 2, 'sea', 'asia', 1))
-        # spaces.append(BattleSpace(787, 617, 'propaganda', 1, 'both', 'asia', 1))
-        # spaces.append(BattleSpace(849, 617, 'strategic', 1, 'both', 'asia', 1))
-        # spaces.append(BattleSpace(725, 679, 'bombing', 1, 'sea', 'asia', 2))
-        # spaces.append(BattleSpace(787, 679, 'propaganda', 2, 'land', 'asia', 2))
-        # spaces.append(BattleSpace(849, 679, 'blank', 0, 'both', 'asia', 2))
+        spaces.append(BattleSpace(297, 537, 'blank', 0, 'both', self.theaters['pacific'], self.campaigns['central_pacific'])) 
+        spaces.append(BattleSpace(111, 599, 'bombing', 1, 'sea', self.theaters['pacific'], self.campaigns['southern_pacific'])) 
+        spaces.append(BattleSpace(173, 599, 'propaganda', 2, 'both', self.theaters['pacific'], self.campaigns['southern_pacific'])) 
+        spaces.append(BattleSpace(235, 599, 'blank', 0, 'both', self.theaters['pacific'], self.campaigns['southern_pacific']))
+        spaces.append(BattleSpace(669, 139, 'tactical', 1, 'land', self.theaters['east_europe'], self.campaigns['northern_east_europe']))
+        spaces.append(BattleSpace(731, 139, 'production', 1, 'land', self.theaters['east_europe'], self.campaigns['northern_east_europe']))  
+        spaces.append(BattleSpace(669, 201, 'propaganda', 1, 'land', self.theaters['east_europe'], self.campaigns['central_east_europe']))  
+        spaces.append(BattleSpace(731, 201, 'imp_research', 2, 'land', self.theaters['east_europe'], self.campaigns['central_east_europe']))  
+        spaces.append(BattleSpace(793, 201, 'blank', 0, 'both', self.theaters['east_europe'], self.campaigns['central_east_europe']))  
+        spaces.append(BattleSpace(669, 263, 'bombing', 1, 'land', self.theaters['east_europe'], self.campaigns['southern_east_europe']))  
+        spaces.append(BattleSpace(731, 263, 'tactical', 2, 'land', self.theaters['east_europe'], self.campaigns['southern_east_europe']))  
+        spaces.append(BattleSpace(793, 263, 'strategic', 3, 'land', self.theaters['east_europe'], self.campaigns['southern_east_europe']))
+        spaces.append(BattleSpace(855, 263, 'propaganda', 2, 'land', self.theaters['east_europe'], self.campaigns['southern_east_europe']))
+        spaces.append(BattleSpace(917, 263, 'blank', 0, 'land', self.theaters['east_europe'], self.campaigns['southern_east_europe']))
+        spaces.append(BattleSpace(579, 411, 'strategic', 3, 'land', self.theaters['africa'], self.campaigns['northern_africa']))
+        spaces.append(BattleSpace(641, 411, 'tactical', 1, 'sea', self.theaters['africa'], self.campaigns['northern_africa']))
+        spaces.append(BattleSpace(703, 411, 'research', 1, 'both', self.theaters['africa'], self.campaigns['northern_africa']))
+        spaces.append(BattleSpace(765, 411, 'propaganda', 1, 'both', self.theaters['africa'], self.campaigns['northern_africa']))
+        spaces.append(BattleSpace(579, 473, 'tactical', 2, 'land', self.theaters['africa'], self.campaigns['southern_africa']))
+        spaces.append(BattleSpace(641, 473, 'imp_production', 2, 'sea', self.theaters['africa'], self.campaigns['southern_africa']))
+        spaces.append(BattleSpace(703, 473, 'blank', 0, 'both', self.theaters['africa'], self.campaigns['southern_africa']))
+        spaces.append(BattleSpace(725, 617, 'propaganda', 2, 'sea', self.theaters['asia'], self.campaigns['northern_asia']))
+        spaces.append(BattleSpace(787, 617, 'propaganda', 1, 'both', self.theaters['asia'], self.campaigns['northern_asia']))
+        spaces.append(BattleSpace(849, 617, 'strategic', 1, 'both', self.theaters['asia'], self.campaigns['northern_asia']))
+        spaces.append(BattleSpace(725, 679, 'bombing', 1, 'sea', self.theaters['asia'], self.campaigns['southern_asia']))
+        spaces.append(BattleSpace(787, 679, 'propaganda', 2, 'land', self.theaters['asia'], self.campaigns['southern_asia']))
+        spaces.append(BattleSpace(849, 679, 'blank', 0, 'both', self.theaters['asia'], self.campaigns['southern_asia']))
 
         return spaces
 
@@ -136,13 +205,14 @@ class GameBoard:
     #     return theaters
 
 if __name__ == '__main__':
-    northern_west_europe = Campaign('northern_west_europe')
+    # northern_west_europe = Campaign('northern_west_europe')
     west_europe = Theater('west_europe')
-    board = GameBoard()
-    print(board.battle_spaces[0].theater.available)
-    print(board.battle_spaces[0].theater.theater)
-    print(board.battle_spaces[0].campaign.available)
-    print(board.battle_spaces[0].campaign.campaign)
+    # board = GameBoard()
+    # print(board.battle_spaces[0].theater.available)
+    # print(board.battle_spaces[0].theater.theater)
+    # print(board.battle_spaces[0].campaign.available)
+    # print(board.battle_spaces[0].campaign.campaign)
+    print(Theater('east_europe').campaigns)
     # print(board.theaters['pacific'].theater)
     # print(board.theaters['pacific'].campaigns[1].complete)
     # print(board.theaters['west_europe'].campaigns['west_europe_1'].battle_spaces[0].effect)

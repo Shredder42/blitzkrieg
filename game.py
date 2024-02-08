@@ -22,30 +22,43 @@ clock = pygame.time.Clock()
 
 
 theaters = {
-    'west_europe': Theater(),
-    'pacific': Theater(),
-    'east_europe': Theater(),
-    'africa': Theater(),
-    'Asia': Theater()
+    'west_europe': Theater('west_europe'),
+    'pacific': Theater('pacific'),
+    'east_europe': Theater('east_europe'),
+    'africa': Theater('africa'),
+    'asia': Theater('asia')
 }
 campaigns = {
-    'northern_west_europe': Campaign(),
-    'central_west_europe': Campaign(),
-    'southern_west_europe': Campaign(),
-    'northern_pacific': Campaign(),
-    'central_pacific': Campaign(),
-    'southern_pacific': Campaign(),
-    'northern_east_europe': Campaign(),
-    'central_east_europe': Campaign(),
-    'southern_east_europe': Campaign(),
-    'northern_africa': Campaign(),
-    'southern_africa': Campaign(),
-    'northern_asia': Campaign(),
-    'southern_asia': Campaign()
+    'northern_west_europe': Campaign('northern_west_europe', 1, True),
+    'central_west_europe': Campaign('central_west_europe', 2,),
+    'southern_west_europe': Campaign('southern_west_europe', 3),
+    'northern_pacific': Campaign('northern_pacific', 1, True),
+    'central_pacific': Campaign('central_pacific', 2),
+    'southern_pacific': Campaign('southern_pacific', 3),
+    'northern_east_europe': Campaign('northern_east_europe', 1, True),
+    'central_east_europe': Campaign('central_east_europe', 2),
+    'southern_east_europe': Campaign('southern_east_europe', 3),
+    'northern_africa': Campaign('northern_africa', 1, True),
+    'southern_africa': Campaign('southern_africa', 2),
+    'northern_asia': Campaign('northern_asia', 1, True),
+    'southern_asia': Campaign('southern_asia', 2)
 }
 
 
 game_board = GameBoard(theaters, campaigns)
+
+# campaigns['northern_west_europe'].add_spaces_to_campaign(game_board.battle_spaces[0:3])
+for campaign in campaigns:
+    campaigns[campaign].add_spaces_to_campaign(game_board)
+print(campaigns['northern_west_europe'].spaces)
+print(campaigns['southern_west_europe'].spaces)
+
+for theater in theaters:
+    theaters[theater].add_campaigns_to_theater(campaigns)
+# theaters['west_europe'].add_campaigns_to_theater(campaigns)
+print(theaters['west_europe'].campaigns)
+print(theaters['pacific'].campaigns)
+
 
 # allied_1 = Token('allied', 'army', 1, 50, 800, 'allied_army_1.png')
 # allied_2 = Token('allied', 'navy', 2, 120, 800, 'allied_navy_2.png')
@@ -117,6 +130,13 @@ def main():
 
     for token in hand.hand_list:
         print(token.rect)
+    print(type(theaters['west_europe'].campaigns))
+    print(theaters['west_europe'].campaigns)
+    print(theaters['west_europe'].campaigns[0].available)
+    print(theaters['west_europe'].campaigns[1].available)
+    print(theaters['west_europe'].campaigns[2].available)
+    # for campaign in theaters['west_europe'].campaigns:
+    #     print(campaign.available)
 
 if __name__ == '__main__':
     main()
