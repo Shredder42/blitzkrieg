@@ -72,13 +72,23 @@ class PlayerHand:
 
     def draw_starting_hand(self):
         hand_list = []
-        for i in range(10):
+        for i in range(5):
             x = 50 + i * 60
             y = 870
             current_token = self.bag.pop()
             current_token.token_starting_location(x, y) 
             hand_list.append(current_token)
         return hand_list
+    
+    def draw_new_token(self):
+        self.hand_list.append(self.bag.pop())
+        for i, token in enumerate((self.hand_list)):
+            x = 50 + i * 60
+            y = 870
+            token.token_starting_location(x, y) 
+
+
+
 
 
 if __name__ == '__main__':

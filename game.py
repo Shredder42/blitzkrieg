@@ -124,7 +124,8 @@ def main():
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])west_europe
                 for token in hand.hand_list:
-                    token.place_token(game_board.battle_spaces, hand.hand_list, game_board.placed_tokens)
+                    token.place_token(game_board.battle_spaces, hand, game_board.placed_tokens)
+                
 
         pygame.display.flip()
 
