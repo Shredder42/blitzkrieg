@@ -71,23 +71,18 @@ class Token:
                         occupied_list.append(item.occupied)
                     if all(occupied_list):
                         print('All campaign spaces full')
+                        space.campaign.available = False
+                        # print(space.campaign.available)
                         # print(camp)
-                        print(space.theater.campaigns)
-                        print(space.theater.campaigns.index(space.campaign))
-                        space.theater.campaigns[space.theater.campaigns.index(space.campaign) + 1].available = True
-                        # next_campaign = rank + 1
-                        # if space.theater.campaigns.rank
+                        # print(space.theater.campaigns)
+                        # print(space.theater.campaigns.index(space.campaign))
+                        try:
+                            space.theater.campaigns[space.theater.campaigns.index(space.campaign) + 1].available = True
+                        except IndexError:
+                            space.theater.available = False
+                            print(space.theater.available)
                     else:
                         print('campaign spaces available')
-                    # #     print(rank)
-                    # for campaign in space.theater.campaigns:
-                    #     if space.campaign == campaign:
-                    #         print(campaign.campaign)
-                    #         if all(campaign.spaces.occupied):
-                    #             print('All campaign spaces full')
-                    #             space.theater.campaigns.index[space.campaign + 1].available = True
-                    #         else:
-                    #             print('campaign spaces available')
                     break
             else:
                 self.rect.x = self.original_x
