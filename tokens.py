@@ -63,6 +63,7 @@ class Token:
                     hand_list.remove(self)
                     self.placed = True
                     placed_tokens.append(self)
+                    space.theater.move_track_marker(self.value)
                     # try to make this a function and careful with variable names
                     camp = space.campaign.spaces
                     occupied_list = []

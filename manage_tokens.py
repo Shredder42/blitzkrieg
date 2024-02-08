@@ -72,7 +72,7 @@ class PlayerHand:
 
     def draw_starting_hand(self):
         hand_list = []
-        for i in range(5):
+        for i in range(10):
             x = 50 + i * 60
             y = 870
             current_token = self.bag.pop()

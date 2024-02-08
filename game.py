@@ -22,11 +22,11 @@ clock = pygame.time.Clock()
 
 
 theaters = {
-    'west_europe': Theater('west_europe'),
-    'pacific': Theater('pacific'),
-    'east_europe': Theater('east_europe'),
-    'africa': Theater('africa'),
-    'asia': Theater('asia')
+    'west_europe': Theater('west_europe', 284, 179),
+    'pacific': Theater('pacific', 239, 446),
+    'east_europe': Theater('east_europe', 816, 110),
+    'africa': Theater('africa', 716, 381),
+    'asia': Theater('asia', 817, 589)
 }
 campaigns = {
     'northern_west_europe': Campaign('northern_west_europe', 1, True),
@@ -81,6 +81,8 @@ def main():
         screen.blit(surface, (0,0))
         for space in game_board.battle_spaces:
             space.draw(surface)
+        for theater in theaters:
+            theaters[theater].draw_track_marker(screen)
         for token in game_board.placed_tokens:
             token.draw(screen)
         # allied_1.draw(screen)

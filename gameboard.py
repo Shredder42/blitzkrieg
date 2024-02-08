@@ -90,7 +90,7 @@ class Campaign:
     #     spaces = []
     #     if self.campaign == 'west_europe_1':
     #         spaces.append(BattleSpace2(196, 207, 'production', 1, 'sea'))
-    #         spaces.append(BattleSpace2(258, 207, 'research', 1, 'land'))
+    #         spaces.append(BattleSpace2(258, 207, 'research', 1, 'land')        self.track_markers)
     #         spaces.append(BattleSpace2(320, 207, 'propaganda', 1,  'both'))
     #     return spaces
 
@@ -98,11 +98,14 @@ class Campaign:
 
 class Theater:
     '''manages theaters and initializes campaigns '''
-    def __init__(self, theater):
+    def __init__(self, theater, score_track_x, score_track_y):
         self.theater = theater
         self.available = True
         self.complete = False
         self.campaigns = []
+        self.score_track_x = score_track_x
+        self.score_track_y = score_track_y
+        self.theater_score = 0
 
     def add_campaigns_to_theater(self, campaigns):
         if self.theater == 'west_europe':
@@ -125,6 +128,33 @@ class Theater:
             campaign_list = [campaigns['northern_asia'], campaigns['southern_asia']]
             for campaign in campaign_list:
                 self.campaigns.append(campaign)
+
+    def draw_track_marker(self, surface):
+        track_marker = pygame.draw.circle(surface, (0, 0, 0), (self.score_track_x, self.score_track_y), 5, 0)
+        return track_marker
+        
+    def move_track_marker(self, token_value):
+        # self.theater_score += token_value
+        for i in range(token_value):
+            self.theater_score += 1
+            if self.theater in ('west_europe', 'pacific', 'east_europe'):
+                if self.theater_score <= 10:
+                    self.score_track_x += 20
+                elif self.theater_score <= 14:
+                    self.score_track_y += 20
+                if self.theater_score >= 14:
+                    self.available = False
+            if self.theater in ('africa', 'asia'):
+                if self.theater_score <= 9:
+                    self.score_track_x += 20
+                elif self.theater_score <= 11:
+                    self.score_track_y += 20
+                if self.theater_score >= 11:
+                    self.available = False
+            
+            
+
+
 
 
         # self.campaigns = self.create_campaigns()
@@ -156,7 +186,7 @@ class GameBoard:
         spaces.append(BattleSpace(320, 207, 'propaganda', 1,  'both', self.theaters['west_europe'], self.campaigns['northern_west_europe']))
         spaces.append(BattleSpace(196, 269, 'bombing', 1, 'land', self.theaters['west_europe'], self.campaigns['central_west_europe']))
         spaces.append(BattleSpace(258, 269, 'production', 1, 'land', self.theaters['west_europe'], self.campaigns['central_west_europe']))
-        spaces.append(BattleSpace(320, 269, 'blank', 0, 'sea', self.theaters['west_europe'], self.campaigns['central_west_europe']))
+        spaces.append(BattleSpace(320, 269, 'blank', 0, 'both', self.theaters['west_europe'], self.campaigns['central_west_europe']))
         spaces.append(BattleSpace(196, 331, 'res_industry', 1, 'both', self.theaters['west_europe'], self.campaigns['southern_west_europe']))
         spaces.append(BattleSpace(258, 331, 'strategic', 3,  'land', self.theaters['west_europe'], self.campaigns['southern_west_europe']))
         spaces.append(BattleSpace(320, 331, 'blank', 0, 'both', self.theaters['west_europe'], self.campaigns['southern_west_europe']))
