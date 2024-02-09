@@ -81,8 +81,7 @@ class TokenBags:
         token_bag.append(Token(None, 'navy', 5, 'special_task_navy.png', effect = 'task_force', special = True))
         token_bag.append(Token(None, 'army', 7, 'special_nuclear_bomb.png', effect = 'nuclear', special = True))
         token_bag.append(Token(None, None, 0, 'special_scientist.png', effect = 'scientist', special = True))
-        # the spy will have to be figured out later
-        # token_bag.append(Token(None, None, None, 'special_spy.png', effect = 'spy', special = True))        
+        token_bag.append(Token(None, None, None, 'special_spy.png', effect = 'spy', special = True))        
         random.shuffle(token_bag)
         return token_bag
 

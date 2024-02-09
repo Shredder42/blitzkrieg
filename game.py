@@ -112,7 +112,7 @@ def main():
                 # allied_3.clicked_token(pos)
                 # allied_4.clicked_token(pos)
                 for token in allied_hand.hand_list:
-                    token.clicked_token(pos)
+                    token.clicked_token(pos, game_board)
             
             elif event.type == pygame.MOUSEMOTION:
                 # allied_1.move_token(event)

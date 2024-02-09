@@ -34,11 +34,16 @@ class Token:
         self.original_x = x
         self.original_y = y
    
-    def clicked_token(self, pos):
+    def clicked_token(self, pos, board):
         if self.rect.collidepoint(pos):
             if not self.placed:
                 print('clicked on token')
                 self.moving = True
+            if self.effect == 'spy':
+                last_token = board.placed_tokens[-1]
+                self.unit = last_token.unit
+                self.value = last_token.value
+                self.effect = last_token.effect
 
     def move_token(self, event):
         if self.moving:
