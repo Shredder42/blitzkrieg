@@ -4,12 +4,13 @@ import pygame
 
 class Token:
     ''' these are the game pieces'''
-    def __init__(self, side, unit, value, token_image, blitz = False):
+    def __init__(self, side, unit, value, token_image, effect = None, special = False):
         self.side = side
         self.unit = unit
         self.value = value      
         self.token_image = token_image
-        self.blitz = blitz
+        self.effect = effect
+        self.special = special
         self.image = self.load_image()
         self.rect = self.image.get_rect()
         self.rect.x = 0

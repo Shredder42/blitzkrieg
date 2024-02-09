@@ -7,11 +7,12 @@ class TokenBags:
     def __init__(self):
         self.allied_token_bag = self.create_allied_token_bag()
         self.axis_token_bag = self.create_axis_token_bag()
+        self.research_special_bag = self.create_special_token_bag()
         
 
     def create_allied_token_bag(self):
         token_bag = []
-        token_bag.append(Token('allied', 'blitz', 0, 'allied_blitz.png', True))
+        token_bag.append(Token('allied', 'airforce', 0, 'allied_blitz.png', effect = 'blitz'))
         token_bag.append(Token('allied', 'army', 1, 'allied_army_1.png'))
         token_bag.append(Token('allied', 'army', 1, 'allied_army_1.png'))
         token_bag.append(Token('allied', 'army', 1, 'allied_army_1.png'))
@@ -38,7 +39,7 @@ class TokenBags:
     
     def create_axis_token_bag(self):
         token_bag = []
-        token_bag.append(Token('axis', 'blitz', 0, 'axis_blitz.png', True))
+        token_bag.append(Token('axis', 'airforce', 0, 'axis_blitz.png', effect = 'blitz'))
         token_bag.append(Token('axis', 'army', 1, 'axis_army_1.png'))
         token_bag.append(Token('axis', 'army', 1, 'axis_army_1.png'))
         token_bag.append(Token('axis', 'army', 1, 'axis_army_1.png'))
@@ -62,6 +63,30 @@ class TokenBags:
         token_bag.append(Token('axis', 'navy', 1, 'axis_admiral.png'))
         random.shuffle(token_bag)
         return token_bag
+    
+    def create_special_token_bag(self):
+        token_bag = []
+        token_bag.append(Token(None, 'army', 1, 'special_blitz_army.png', effect = 'blitz', special = True))
+        token_bag.append(Token(None, 'army', 4, 'special_elite_army.png', effect = None, special = True))
+        token_bag.append(Token(None, 'army', 4, 'special_elite_army.png', effect = None, special = True))
+        token_bag.append(Token(None, 'army', 5, 'special_task_army.png', effect = 'task_force', special = True))
+        token_bag.append(Token(None, 'airforce', 1, 'special_bomb_airforce.png', effect = 'bombing', special = True))
+        token_bag.append(Token(None, 'airforce', 3, 'special_elite_airforce.png', effect = None, special = True))
+        token_bag.append(Token(None, 'airforce', 3, 'special_elite_airforce.png', effect = None, special = True))
+        token_bag.append(Token(None, 'airforce', 4, 'special_task_airforce.png', effect = 'task_force', special = True))
+        token_bag.append(Token(None, 'navy', 1, 'special_blitz_navy.png', effect = 'blitz', special = True))
+        token_bag.append(Token(None, 'navy', 2, 'special_bomb_navy.png', effect = 'bombing', special = True))
+        token_bag.append(Token(None, 'navy', 4, 'special_elite_navy.png', effect = None, special = True))
+        token_bag.append(Token(None, 'navy', 4, 'special_elite_navy.png', effect = None, special = True))
+        token_bag.append(Token(None, 'navy', 5, 'special_task_navy.png', effect = 'task_force', special = True))
+        token_bag.append(Token(None, 'airforce', 0, 'special_scientist.png', effect = 'scientist', special = True))
+        token_bag.append(Token(None, 'army', 7, 'special_nuclear_bomb.png', effect = 'nuclear', special = True))
+        # the spy will have to be figured out later
+        # token_bag.append(Token(None, None, None, 'special_spy.png', effect = 'spy', special = True))
+        
+        random.shuffle(token_bag)
+        return token_bag
+
 
 
 class PlayerHand:
