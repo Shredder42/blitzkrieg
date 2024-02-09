@@ -232,9 +232,24 @@ class GameBoard:
     def tactical_advantage(self, theater, value):
         theater.move_track_marker(value)
 
-    def bombing(self, opponent_hand, bag):
-            bag.append(opponent_hand.hand_list.pop(random.randint(0, len(opponent_hand.hand_list))))
-            random.shuffle(bag)
+    def bombing(self, opponent_hand, opponent_bag):
+        opponent_bag.append(opponent_hand.hand_list.pop(random.randrange(0, len(opponent_hand.hand_list) - 1)))
+        random.shuffle(opponent_bag)
+
+    def research(self, player_bag, research_bag):
+        player_bag.append(research_bag.pop())
+        random.shuffle(player_bag)
+        random.shuffle(research_bag)
+
+    def research_industry(self, hand, research_bag):
+        hand.hand_list.append(research_bag.pop())
+        random.shuffle(research_bag)
+        for i, token in enumerate((hand.hand_list)):
+            x = 50 + i * 60
+            y = 870
+            token.token_starting_location(x, y) 
+
+
         
     # def create_theaters(self):
     #     theaters = {}

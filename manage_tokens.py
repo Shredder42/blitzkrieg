@@ -7,7 +7,7 @@ class TokenBags:
     def __init__(self):
         self.allied_token_bag = self.create_allied_token_bag()
         self.axis_token_bag = self.create_axis_token_bag()
-        self.research_special_bag = self.create_special_token_bag()
+        self.research_bag = self.create_research_token_bag()
         
 
     def create_allied_token_bag(self):
@@ -64,7 +64,7 @@ class TokenBags:
         random.shuffle(token_bag)
         return token_bag
     
-    def create_special_token_bag(self):
+    def create_research_token_bag(self):
         token_bag = []
         token_bag.append(Token(None, 'army', 1, 'special_blitz_army.png', effect = 'blitz', special = True))
         token_bag.append(Token(None, 'army', 4, 'special_elite_army.png', effect = None, special = True))
@@ -82,8 +82,7 @@ class TokenBags:
         token_bag.append(Token(None, 'airforce', 0, 'special_scientist.png', effect = 'scientist', special = True))
         token_bag.append(Token(None, 'army', 7, 'special_nuclear_bomb.png', effect = 'nuclear', special = True))
         # the spy will have to be figured out later
-        # token_bag.append(Token(None, None, None, 'special_spy.png', effect = 'spy', special = True))
-        
+        # token_bag.append(Token(None, None, None, 'special_spy.png', effect = 'spy', special = True))        
         random.shuffle(token_bag)
         return token_bag
 
@@ -97,7 +96,7 @@ class PlayerHand:
 
     def draw_starting_hand(self):
         hand_list = []
-        for i in range(5):
+        for i in range(10):
             x = 50 + i * 60
             y = 870
             current_token = self.bag.pop()

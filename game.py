@@ -50,8 +50,8 @@ game_board = GameBoard(theaters, campaigns)
 # campaigns['northern_west_europe'].add_spaces_to_campaign(game_board.battle_spaces[0:3])
 for campaign in campaigns:
     campaigns[campaign].add_spaces_to_campaign(game_board)
-print(campaigns['northern_west_europe'].spaces)
-print(campaigns['southern_west_europe'].spaces)
+# print(campaigns['northern_west_europe'].spaces)
+# print(campaigns['southern_west_europe'].spaces)
 
 for theater in theaters:
     theaters[theater].add_campaigns_to_theater(campaigns)
@@ -75,7 +75,7 @@ print('\n')
 print('axis hand')
 for token in axis_hand.hand_list:
     print(f'{token.unit} value {token.value}')
-print(bags.axis_token_bag)
+# print(bags.axis_token_bag)
 
 
 def main():
@@ -130,7 +130,7 @@ def main():
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])west_europe
                 for token in allied_hand.hand_list:
-                    token.place_token(game_board.battle_spaces, allied_hand, game_board.placed_tokens, game_board, axis_hand, bags.axis_token_bag)
+                    token.place_token(game_board, allied_hand, axis_hand, bags)
                 
 
         pygame.display.flip()
@@ -142,7 +142,7 @@ def main():
     print('\n')
     for token in axis_hand.hand_list:
         print(f'{token.unit} value {token.value}')
-    print(bags.axis_token_bag)
+    # print(bags.axis_token_bag)
 
 
 if __name__ == '__main__':
