@@ -52,7 +52,7 @@ class Token:
         else:
             return False
 
-    def place_token(self, space_list, hand, placed_tokens):
+    def place_token(self, space_list, hand, placed_tokens, board, opponent_hand, bag):
         if self.moving:
             for space in space_list:
                 if self.rect.collidepoint(space.rect.center) and not \
@@ -61,11 +61,18 @@ class Token:
                     self.rect.center = space.rect.center
                     space.occupied = True
                     hand.hand_list.remove(self)
-                    hand.draw_new_token() # will need to move this to end of turn, not token placement
+                    # hand.draw_new_token() # will need to move this to end of turn, not token placement
                     self.placed = True
                     placed_tokens.append(self)
                     space.theater.move_track_marker(self.value)
-                    # try to make this a function and careful with variable names
+                    # battle space effect
+                    if space.effect == 'production':
+                        board.industrial_production(hand)
+                    if space.effect == 'tactical':
+                        board.tactical_advantage(space.theater, space.effect_value)
+                    if space.effect == 'bombing':
+                        board.bombing(opponent_hand, bag)
+                    # try to make this a function and careful with variable names - probs in campaign
                     camp = space.campaign.spaces
                     occupied_list = []
                     for item in camp:
@@ -77,11 +84,12 @@ class Token:
                         # print(camp)
                         # print(space.theater.campaigns)
                         # print(space.theater.campaigns.index(space.campaign))
+                        # this might also be own function in theater
                         try:
                             space.theater.campaigns[space.theater.campaigns.index(space.campaign) + 1].available = True
                         except IndexError:
                             space.theater.available = False
-                            print(space.theater.available)
+                            # print(space.theater.available)
                     else:
                         print('campaign spaces available')
                     break

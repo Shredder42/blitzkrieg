@@ -2,7 +2,7 @@ import os
 import pygame
 from gameboard import GameBoard, BattleSpace, Theater, Campaign
 from tokens import Token
-from manage_tokens import PlayerHand, TokenBag
+from manage_tokens import PlayerHand, TokenBags
 
 pygame.init()
 pygame.font.init()
@@ -65,11 +65,17 @@ print(theaters['pacific'].campaigns)
 # allied_3 = Token('allied', 'navy', 3, 190, 800, 'allied_navy_3.png')
 # allied_4 = Token('allied', 'airforce', 1, 260, 800, 'allied_airforce_1.png')
 
-bag = TokenBag()
+bags = TokenBags()
 # print(bag.allied_token_bag)
-hand = PlayerHand(bag.allied_token_bag)
-for token in hand.hand_list:
+allied_hand = PlayerHand(bags.allied_token_bag)
+axis_hand = PlayerHand(bags.axis_token_bag)
+for token in allied_hand.hand_list:
     print(f'{token.unit} value {token.value}')
+print('\n')
+print('axis hand')
+for token in axis_hand.hand_list:
+    print(f'{token.unit} value {token.value}')
+print(bags.axis_token_bag)
 
 
 def main():
@@ -89,7 +95,7 @@ def main():
         # allied_2.draw(screen)
         # allied_3.draw(screen)
         # allied_4.draw(screen)
-        for token in hand.hand_list:
+        for token in allied_hand.hand_list:
             token.draw(screen)
 
         for event in pygame.event.get():
@@ -105,7 +111,7 @@ def main():
                 # allied_2.clicked_token(pos)
                 # allied_3.clicked_token(pos)
                 # allied_4.clicked_token(pos)
-                for token in hand.hand_list:
+                for token in allied_hand.hand_list:
                     token.clicked_token(pos)
             
             elif event.type == pygame.MOUSEMOTION:
@@ -113,7 +119,7 @@ def main():
                 # allied_2.move_token(event)
                 # allied_3.move_token(event)
                 # allied_4.move_token(event)
-                for token in hand.hand_list:
+                for token in allied_hand.hand_list:
                     token.move_token(event)
 
 
@@ -123,23 +129,21 @@ def main():
                 # allied_2.place_token(game_board.battle_spaces[1])
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])west_europe
-                for token in hand.hand_list:
-                    token.place_token(game_board.battle_spaces, hand, game_board.placed_tokens)
+                for token in allied_hand.hand_list:
+                    token.place_token(game_board.battle_spaces, allied_hand, game_board.placed_tokens, game_board, axis_hand, bags.axis_token_bag)
                 
 
         pygame.display.flip()
 
         clock.tick(60)
 
-    for token in hand.hand_list:
+    for token in allied_hand.hand_list:
         print(token.rect)
-    print(type(theaters['west_europe'].campaigns))
-    print(theaters['west_europe'].campaigns)
-    print(theaters['west_europe'].campaigns[0].available)
-    print(theaters['west_europe'].campaigns[1].available)
-    print(theaters['west_europe'].campaigns[2].available)
-    # for campaign in theaters['west_europe'].campaigns:
-    #     print(campaign.available)
+    print('\n')
+    for token in axis_hand.hand_list:
+        print(f'{token.unit} value {token.value}')
+    print(bags.axis_token_bag)
+
 
 if __name__ == '__main__':
     main()

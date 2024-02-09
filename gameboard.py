@@ -1,4 +1,5 @@
 import pygame
+import random
 '''
 types of battle spaces are:
     - industrial production (production)
@@ -133,9 +134,9 @@ class Theater:
         track_marker = pygame.draw.circle(surface, (0, 0, 0), (self.score_track_x, self.score_track_y), 5, 0)
         return track_marker
         
-    def move_track_marker(self, token_value):
+    def move_track_marker(self, value):
         # self.theater_score += token_value
-        for i in range(token_value):
+        for i in range(value):
             self.theater_score += 1
             if self.theater in ('west_europe', 'pacific', 'east_europe'):
                 if self.theater_score <= 10:
@@ -225,6 +226,16 @@ class GameBoard:
 
         return spaces
 
+    def industrial_production(self, hand):
+        hand.draw_new_token()
+
+    def tactical_advantage(self, theater, value):
+        theater.move_track_marker(value)
+
+    def bombing(self, opponent_hand, bag):
+            bag.append(opponent_hand.hand_list.pop(random.randint(0, len(opponent_hand.hand_list))))
+            random.shuffle(bag)
+        
     # def create_theaters(self):
     #     theaters = {}
     #     theaters['west_europe'] = Theater('west_europe')

@@ -2,7 +2,7 @@ import random
 import pygame
 from tokens import Token
 
-class TokenBag:
+class TokenBags:
     ''' token bag that holds the tokens to draw from '''
     def __init__(self):
         self.allied_token_bag = self.create_allied_token_bag()
@@ -92,7 +92,7 @@ class PlayerHand:
 
 
 if __name__ == '__main__':
-    bag = TokenBag()
+    bag = TokenBags()
     print(type(bag.allied_token_bag))
     print(len(bag.allied_token_bag))
     print(bag.allied_token_bag[0].unit)
