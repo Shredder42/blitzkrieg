@@ -79,8 +79,8 @@ class TokenBags:
         token_bag.append(Token(None, 'navy', 4, 'special_elite_navy.png', effect = None, special = True))
         token_bag.append(Token(None, 'navy', 4, 'special_elite_navy.png', effect = None, special = True))
         token_bag.append(Token(None, 'navy', 5, 'special_task_navy.png', effect = 'task_force', special = True))
-        token_bag.append(Token(None, 'airforce', 0, 'special_scientist.png', effect = 'scientist', special = True))
         token_bag.append(Token(None, 'army', 7, 'special_nuclear_bomb.png', effect = 'nuclear', special = True))
+        token_bag.append(Token(None, None, 0, 'special_scientist.png', effect = 'scientist', special = True))
         # the spy will have to be figured out later
         # token_bag.append(Token(None, None, None, 'special_spy.png', effect = 'spy', special = True))        
         random.shuffle(token_bag)
@@ -96,9 +96,9 @@ class PlayerHand:
 
     def draw_starting_hand(self):
         hand_list = []
-        for i in range(10):
+        for i in range(15):
             x = 50 + i * 60
-            y = 870
+            y = 800
             current_token = self.bag.pop()
             current_token.token_starting_location(x, y) 
             hand_list.append(current_token)
@@ -108,7 +108,7 @@ class PlayerHand:
         self.hand_list.append(self.bag.pop())
         for i, token in enumerate((self.hand_list)):
             x = 50 + i * 60
-            y = 870
+            y = 800
             token.token_starting_location(x, y) 
 
 

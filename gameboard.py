@@ -152,6 +152,30 @@ class Theater:
                     self.score_track_y += 20
                 if self.theater_score >= 11:
                     self.available = False
+
+    def move_track_marker_nuclear(self, theaters):
+        print(type(theaters))
+        for i in range(2):
+            for k, v in theaters.items():                
+                if k != self.theater:
+                    if k in ('west_europe', 'pacific', 'east_europe'):
+                        if v.theater_score <= 13:
+                            v.theater_score -= 1
+                        if v.theater_score <= 9:
+                            v.score_track_x -= 20
+                        elif v.theater_score <= 12:
+                            v.score_track_y -= 20
+                    if k in ('africa', 'asia'):
+                        if v.theater_score <= 10:
+                            v.theater_score -= 1
+                        if v.theater_score <= 8:
+                            v.score_track_x -= 20
+                        elif v.theater_score == 9:
+                            v.score_track_y -= 20
+
+
+            
+
             
             
 
@@ -179,6 +203,8 @@ class GameBoard:
         self.campaigns = campaigns
         self.battle_spaces = self.create_battle_spaces()
         self.placed_tokens = []
+        self.allied_score = 0
+        self.axis_score = 0
 
     def create_battle_spaces(self):
         spaces = []
@@ -246,7 +272,7 @@ class GameBoard:
         random.shuffle(research_bag)
         for i, token in enumerate((hand.hand_list)):
             x = 50 + i * 60
-            y = 870
+            y = 800
             token.token_starting_location(x, y) 
 
 

@@ -8,7 +8,7 @@ pygame.init()
 pygame.font.init()
 
 SCREEN_WIDTH = 1060
-SCREEN_HEIGHT = 1000
+SCREEN_HEIGHT = 900
 ESPRESSO = (75, 56, 42) # table top color
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -16,7 +16,7 @@ pygame.display.set_caption('Blitzkrieg!')
 
 board = pygame.image.load(os.path.join('images', 'blitzkrieg_game_board_italian.jpg'))
 board = pygame.transform.scale_by(board, 2)
-surface = pygame.Surface((1060, 1000), pygame.SRCALPHA) # need for creating transparent rect
+surface = pygame.Surface((1060, 900), pygame.SRCALPHA) # need for creating transparent rect
 clock = pygame.time.Clock()
 
 
@@ -130,7 +130,7 @@ def main():
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])west_europe
                 for token in allied_hand.hand_list:
-                    token.place_token(game_board, allied_hand, axis_hand, bags)
+                    token.place_token(game_board, allied_hand, axis_hand, bags, theaters)
                 
 
         pygame.display.flip()
