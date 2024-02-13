@@ -19,6 +19,20 @@ campaigns are:
     - africa
     - asia
 '''
+class TheaterButton:
+    def __init__(self, x, y, width, height, theater):
+        self.x = x
+        self. y = y
+        self.width = width
+        self.height = height
+        self.theater = theater
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.armed = False
+
+    def draw(self, surface):
+        theater_button = pygame.draw.rect(surface, (255, 255, 255, 0), self.rect)
+        return theater_button
+
 class BattleSpace:
     ''' these are the spaces on the game board '''
     def __init__(self, x, y, effect, effect_value, type, theater, campaign):
@@ -144,14 +158,14 @@ class Theater:
                 elif self.theater_score <= 14:
                     self.score_track_y += 20
                 if self.theater_score >= 14:
-                    self.available = False
+                    self.available = False # closes theather
             if self.theater in ('africa', 'asia'):
                 if self.theater_score <= 9:
                     self.score_track_x += 20
                 elif self.theater_score <= 11:
                     self.score_track_y += 20
                 if self.theater_score >= 11:
-                    self.available = False
+                    self.available = False # closes theather
 
     def move_track_marker_nuclear(self, theaters):
         print(type(theaters))
@@ -172,6 +186,25 @@ class Theater:
                             v.score_track_x -= 20
                         elif v.theater_score == 9:
                             v.score_track_y -= 20
+    
+    def move_track_marker_strategic(self, theaters, space_value, selected_theater):
+        for k, v in theaters.items():   
+            if k != self.theater and k == selected_theater:
+                for i in range(space_value):
+                    v.theater_score += 1
+                    if k in ('west_europe', 'pacific', 'east_europe'):
+                        if v.theater_score <= 10:
+                            v.score_track_x += 20
+                        elif v.theater_score <= 13:
+                            v.score_track_y += 20
+                    if k in ('africa', 'asia'):
+                        if v.theater_score <= 9:
+                            v.score_track_x += 20
+                        elif v.theater_score <= 10:
+                            v.score_track_y += 20
+
+
+
 
 
             
@@ -202,6 +235,7 @@ class GameBoard:
         self.theaters = theaters
         self.campaigns = campaigns
         self.battle_spaces = self.create_battle_spaces()
+        self.theater_buttons = self.create_theater_buttons()
         self.placed_tokens = []
         self.allied_score = 0
         self.axis_score = 0
@@ -251,6 +285,16 @@ class GameBoard:
         spaces.append(BattleSpace(849, 679, 'blank', 0, 'both', self.theaters['asia'], self.campaigns['southern_asia']))
 
         return spaces
+    
+    def create_theater_buttons(self):
+        buttons = []
+        buttons.append(TheaterButton(178, 136, 208, 25, 'west_europe'))
+        buttons.append(TheaterButton(155, 403, 170, 25, 'pacific'))
+        buttons.append(TheaterButton(725, 68, 182, 25, 'east_europe'))
+        buttons.append(TheaterButton(600, 340, 235, 25, 'africa'))
+        buttons.append(TheaterButton(730, 547, 175, 25, 'asia'))
+
+        return buttons
 
     def industrial_production(self, hand):
         hand.draw_new_token()
@@ -274,6 +318,7 @@ class GameBoard:
             x = 50 + i * 60
             y = 800
             token.token_starting_location(x, y) 
+
 
 
         

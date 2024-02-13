@@ -89,6 +89,28 @@ class GameBoard:
 
         return spaces
 
+
+# in gameboard in theaters
+    def move_track_marker_tactical(self, theaters, space_value, selected_theater):
+        for k, v in theaters.items():   
+            if k != self.theater and k == selected_theater: # need to identify selected theater
+                for i in range(space_value):
+                    if k in ('west_europe', 'pacific', 'east_europe'):
+                        if v.theater_score <= 10:
+                            v.score_track_x += 20
+                        elif v.theater_score <= 14:
+                            v.score_track_y += 20
+                        if v.theater_score >= 14:
+                            v.available = False # closes theather
+                if self.theater_score >= 14:
+                    if k in ('africa', 'asia'):
+                        if v.theater_score <= 9:
+                            v.score_track_x += 20
+                        elif v.theater_score <= 11:
+                            v.score_track_y += 20
+                        if v.theater_score >= 11:
+                            v.available = False # closes theather
+
 if __name__ == '__main__':
     space1 = BattleSpace(196, 207, 'production', 'sea', 'west europe', 1)
     print(space1.type)

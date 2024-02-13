@@ -80,13 +80,17 @@ for token in axis_hand.hand_list:
 
 def main():
     run = True
-    moving = False
+    # moving = False
+    played_space = None
     while run:
         screen.fill(ESPRESSO)
         screen.blit(board, (0,0))
         screen.blit(surface, (0,0))
         for space in game_board.battle_spaces:
             space.draw(surface)
+        for button in game_board.theater_buttons:
+            button.draw(surface)
+    
         for theater in theaters:
             theaters[theater].draw_track_marker(screen)
         for token in game_board.placed_tokens:
@@ -97,6 +101,8 @@ def main():
         # allied_4.draw(screen)
         for token in allied_hand.hand_list:
             token.draw(screen)
+        # for token in axis_hand.hand_list:
+        #     token.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -130,7 +136,27 @@ def main():
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])west_europe
                 for token in allied_hand.hand_list:
-                    token.place_token(game_board, allied_hand, axis_hand, bags, theaters)
+                    if token.moving:
+                        played_space = token.place_token(game_board, allied_hand, axis_hand, bags, theaters)
+                        break
+
+
+                if played_space:
+                    if played_space.effect == 'strategic':
+                        for button in game_board.theater_buttons:
+                            # button.armed = True
+                            if button.rect.collidepoint(pos): # and button.armed:
+                                played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
+                                # button.armed = False
+                                if button.theater != played_space.theater.theater:
+                                    played_space = None
+
+                    
+        
+                    
+
+
+                
                 
 
         pygame.display.flip()
@@ -142,7 +168,9 @@ def main():
     print('\n')
     for token in axis_hand.hand_list:
         print(f'{token.unit} value {token.value}')
+    print(len(axis_hand.hand_list))
     # print(bags.axis_token_bag)
+    print(played_space.effect)
 
 
 if __name__ == '__main__':
