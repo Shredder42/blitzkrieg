@@ -19,7 +19,17 @@ board = pygame.transform.scale_by(board, 2)
 surface = pygame.Surface((1060, 900), pygame.SRCALPHA) # need for creating transparent rect
 clock = pygame.time.Clock()
 
-
+'''
+admirals & generals
+propaganda spaces
+    victory points
+blitz tokens
+closing theaters
+fix up axis & ally hands
+turns
+    check for victory
+figure out playing over internet?
+'''
 
 theaters = {
     'west_europe': Theater('west_europe', 284, 179),
@@ -144,20 +154,11 @@ def main():
                 if played_space:
                     if played_space.effect == 'strategic':
                         for button in game_board.theater_buttons:
-                            # button.armed = True
-                            if button.rect.collidepoint(pos): # and button.armed:
+                            if button.rect.collidepoint(pos):
                                 played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
-                                # button.armed = False
                                 if button.theater != played_space.theater.theater:
                                     played_space = None
-
-                    
-        
-                    
-
-
-                
-                
+               
 
         pygame.display.flip()
 
@@ -170,7 +171,7 @@ def main():
         print(f'{token.unit} value {token.value}')
     print(len(axis_hand.hand_list))
     # print(bags.axis_token_bag)
-    print(played_space.effect)
+    # print(played_space.effect)
 
 
 if __name__ == '__main__':

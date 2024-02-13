@@ -44,6 +44,7 @@ class BattleSpace:
         self.theater = theater
         self.campaign = campaign
         self.occupied = False
+        self.occupied_by = None
         self.rect = pygame.Rect(x, y, 50, 50)
 
     def draw(self, surface):
@@ -121,6 +122,8 @@ class Theater:
         self.score_track_x = score_track_x
         self.score_track_y = score_track_y
         self.theater_score = 0
+        self.army_count = 0
+        self.navy_count = 0
 
     def add_campaigns_to_theater(self, campaigns):
         if self.theater == 'west_europe':
@@ -202,6 +205,16 @@ class Theater:
                             v.score_track_x += 20
                         elif v.theater_score <= 10:
                             v.score_track_y += 20
+
+    def adjust_unit_count(self, token):
+        if not token.special:
+            if token.unit == 'airforce': 
+                self.army_count += 1
+                self.navy_count += 1
+            elif token.unit == 'army':
+                self.army_count += 1
+            elif token.unit == 'navy':
+                self.navy_count += 1
 
 
 

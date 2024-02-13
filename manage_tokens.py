@@ -32,8 +32,8 @@ class TokenBags:
         token_bag.append(Token('allied', 'navy', 2, 'allied_navy_2.png'))
         token_bag.append(Token('allied', 'navy', 3, 'allied_navy_3.png'))
         token_bag.append(Token('allied', 'navy', 3, 'allied_navy_3.png'))
-        token_bag.append(Token('allied', 'army', 1, 'allied_general.png'))
-        token_bag.append(Token('allied', 'navy', 1, 'allied_admiral.png'))
+        token_bag.append(Token('allied', 'army', 1, 'allied_general.png', effect = 'general'))
+        token_bag.append(Token('allied', 'navy', 1, 'allied_admiral.png', effect = 'admiral'))
         random.shuffle(token_bag)
         return token_bag
     
@@ -59,8 +59,8 @@ class TokenBags:
         token_bag.append(Token('axis', 'navy', 2, 'axis_navy_2.png'))
         token_bag.append(Token('axis', 'navy', 3, 'axis_navy_3.png'))
         token_bag.append(Token('axis', 'navy', 3, 'axis_navy_3.png'))
-        token_bag.append(Token('axis', 'army', 1, 'axis_general.png'))
-        token_bag.append(Token('axis', 'navy', 1, 'axis_admiral.png'))
+        token_bag.append(Token('axis', 'army', 1, 'axis_general.png', effect = 'general'))
+        token_bag.append(Token('axis', 'navy', 1, 'axis_admiral.png', effect = 'admiral'))
         random.shuffle(token_bag)
         return token_bag
     

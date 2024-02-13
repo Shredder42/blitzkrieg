@@ -66,10 +66,12 @@ class Token:
             self.effect == 'scientist'):
                 self.rect.center = space.rect.center
                 space.occupied = True
+                space.occupied_by = self
                 hand.hand_list.remove(self)
                 # hand.draw_new_token() # will need to move this to end of turn, not token placement
                 self.placed = True
                 board.placed_tokens.append(self)
+                space.theater.adjust_unit_count(self)
                 space.theater.move_track_marker(self.value)
                 # token effects
                 if self.effect == 'blitz':
@@ -78,6 +80,10 @@ class Token:
                     board.bombing(opponent_hand, bags.axis_token_bag)
                 if self.effect == 'nuclear':
                     space.theater.move_track_marker_nuclear(theaters)
+                if self.effect == 'admiral':
+                    space.theater.move_track_marker(space.theater.navy_count - 1)
+                if self.effect == 'general':
+                    space.theater.move_track_marker(space.theater.army_count - 1)
                 # battle space effects
                 if self.effect != 'task_force':
                     if space.effect == 'production':
