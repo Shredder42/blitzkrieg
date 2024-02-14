@@ -58,7 +58,7 @@ class Token:
         else:
             return False
 
-    def place_token(self, board, hand, opponent_hand, bags, theaters):
+    def place_token(self, board, hand, opponent_hand, bags, theaters, turn):
         for space in board.battle_spaces:
             if self.rect.collidepoint(space.rect.center) and not \
             space.occupied and space.theater.available and \
