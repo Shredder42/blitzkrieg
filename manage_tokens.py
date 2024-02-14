@@ -89,25 +89,33 @@ class TokenBags:
 
 class PlayerHand:
     ''' players playing hand '''
-    def __init__(self, bag):
+    def __init__(self, bag, side):
         self.bag = bag
+        self.side = side
         self.hand_list = self.draw_starting_hand()
 
     def draw_starting_hand(self):
         hand_list = []
+        if self.side == 'allied':
+            y = 770
+        elif self.side == 'axis':
+            y = 840
         for i in range(15):
             x = 50 + i * 60
-            y = 800
             current_token = self.bag.pop()
             current_token.token_starting_location(x, y) 
             hand_list.append(current_token)
+
         return hand_list
     
     def draw_new_token(self):
         self.hand_list.append(self.bag.pop())
+        if self.side == 'allied':
+            y = 770
+        elif self.side == 'axis':
+            y = 840
         for i, token in enumerate((self.hand_list)):
             x = 50 + i * 60
-            y = 800
             token.token_starting_location(x, y) 
 
 

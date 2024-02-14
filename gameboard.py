@@ -123,8 +123,10 @@ class Theater:
         self.score_track_x = score_track_x
         self.score_track_y = score_track_y
         self.theater_score = 0
-        self.army_count = 0
-        self.navy_count = 0
+        self.allied_army_count = 0
+        self.allied_navy_count = 0
+        self.axis_army_count = 0
+        self.axis_navy_count = 0
 
     def add_campaigns_to_theater(self, campaigns):
         if self.theater == 'west_europe':
@@ -152,24 +154,52 @@ class Theater:
         track_marker = pygame.draw.circle(surface, (0, 0, 0), (self.score_track_x, self.score_track_y), 5, 0)
         return track_marker
         
-    def move_track_marker(self, value):
+    def move_track_marker(self, value, turn):
         # self.theater_score += token_value
-        for i in range(value):
-            self.theater_score += 1
-            if self.theater in ('west_europe', 'pacific', 'east_europe'):
-                if self.theater_score <= 10:
-                    self.score_track_x += 20
-                elif self.theater_score <= 14:
-                    self.score_track_y += 20
-                if self.theater_score >= 14:
-                    self.available = False # closes theather
-            if self.theater in ('africa', 'asia'):
-                if self.theater_score <= 9:
-                    self.score_track_x += 20
-                elif self.theater_score <= 11:
-                    self.score_track_y += 20
-                if self.theater_score >= 11:
-                    self.available = False # closes theather
+        if self.theater_score > -14 and self.theater_score < 14:
+            for i in range(value):
+                if turn == 'axis':
+                    self.theater_score += 1
+                    if self.theater in ('west_europe', 'pacific', 'east_europe'):
+                        if self.theater_score < -9:
+                            self.score_track_y -= 20
+                        elif self.theater_score <= 10:
+                            self.score_track_x += 20
+                        elif self.theater_score <= 14:
+                            self.score_track_y += 20
+                        if self.theater_score == 14:
+                            self.available = False # closes theathers
+                    elif self.theater in ('africa', 'asia'):
+                        if self.theater_score <= -9:
+                            self.score_track_y -= 20
+                        elif self.theater_score <= 9:
+                            self.score_track_x += 20
+                        elif self.theater_score <= 10:
+                            self.score_track_y += 20
+                        if self.theater_score == 11:
+                            self.available = False # closes theather
+                elif turn == 'allied':
+                    self.theater_score -= 1
+                    if self.theater in ('west_europe', 'pacific', 'east_europe'):
+                        if self.theater_score > 9:
+                            self.score_track_y -= 20
+                        elif self.theater_score >= -10:
+                            self.score_track_x -= 20
+                        elif self.theater_score >= -14:
+                            self.score_track_y += 20
+                        if self.theater_score == -14:
+                            self.available = False # closes theather
+                    elif self.theater in ('africa', 'asia'):
+                        if self.theater_score >= 9:
+                            self.score_track_y -= 20    
+                        elif self.theater_score >= -9:
+                            self.score_track_x -= 20
+                        elif self.theater_score >= -10:
+                            self.score_track_y += 20
+                        if self.theater_score == -11:
+                            self.available = False # closes theather
+
+        print(self.theater_score)
 
     def move_track_marker_nuclear(self, theaters):
         print(type(theaters))
@@ -207,15 +237,25 @@ class Theater:
                         elif v.theater_score <= 10:
                             v.score_track_y += 20
 
-    def adjust_unit_count(self, token):
+    def adjust_unit_count(self, token, turn):
         if not token.special:
             if token.unit == 'airforce': 
-                self.army_count += 1
-                self.navy_count += 1
+                if turn == 'allied':
+                    self.allied_army_count += 1
+                    self.allied_navy_count += 1
+                elif turn == 'axis':
+                    self.axis_army_count += 1
+                    self.axis_navy_count += 1
             elif token.unit == 'army':
-                self.army_count += 1
+                if turn == 'allied':
+                    self.allied_army_count += 1
+                elif turn == 'axis':
+                    self.axis_army_count += 1
             elif token.unit == 'navy':
-                self.navy_count += 1
+                if turn == 'allied':
+                    self.allied_navy_count += 1
+                elif turn == 'axis':
+                    self.axis_navy_count += 1
 
 
 
@@ -311,8 +351,8 @@ class GameBoard:
     def industrial_production(self, hand):
         hand.draw_new_token()
 
-    def tactical_advantage(self, theater, value):
-        theater.move_track_marker(value)
+    def tactical_advantage(self, theater, value, turn):
+        theater.move_track_marker(value, turn)
 
     def bombing(self, opponent_hand, opponent_bag):
         opponent_bag.append(opponent_hand.hand_list.pop(random.randrange(0, len(opponent_hand.hand_list) - 1)))

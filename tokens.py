@@ -58,7 +58,7 @@ class Token:
         else:
             return False
 
-    def place_token(self, board, hand, opponent_hand, bags, theaters, turn):
+    def place_token(self, board, player_hand, opponent_hand, research_bag, player_bag, opponent_bag, theaters, turn):
         for space in board.battle_spaces:
             if self.rect.collidepoint(space.rect.center) and not \
             space.occupied and space.theater.available and \
@@ -67,44 +67,44 @@ class Token:
                 self.rect.center = space.rect.center
                 space.occupied = True
                 space.occupied_by = self
-                hand.hand_list.remove(self)
+                player_hand.hand_list.remove(self)
                 # hand.draw_new_token() # will need to move this to end of turn, not token placement
                 self.placed = True
                 board.placed_tokens.append(self)
-                space.theater.adjust_unit_count(self)
-                space.theater.move_track_marker(self.value)
+                space.theater.adjust_unit_count(self, turn)
+                space.theater.move_track_marker(self.value, turn)
                 # token effects
                 if self.effect == 'blitz':
                     print('place another token') #implement this when handling turns
                 if self.effect == 'bombing':
-                    board.bombing(opponent_hand, bags.axis_token_bag)
+                    board.bombing(opponent_hand, opponent_bag)
                 if self.effect == 'nuclear':
                     space.theater.move_track_marker_nuclear(theaters)
                 if self.effect == 'admiral':
-                    space.theater.move_track_marker(space.theater.navy_count - 1)
+                    space.theater.move_track_marker(space.theater.navy_count - 1, turn)
                 if self.effect == 'general':
-                    space.theater.move_track_marker(space.theater.army_count - 1)
+                    space.theater.move_track_marker(space.theater.army_count - 1, turn)
                 # battle space effects
                 if self.effect != 'task_force':
                     if space.effect == 'propaganda':
                         for i in range(space.effect_value):
                             board.propaganda()
                     if space.effect == 'production':
-                        board.industrial_production(hand)
+                        board.industrial_production(player_hand)
                     if space.effect == 'imp_production':
                         for i in range(space.effect_value):
-                            board.industrial_production(hand)
+                            board.industrial_production(player_hand)
                     if space.effect == 'tactical':
-                        board.tactical_advantage(space.theater, space.effect_value)
+                        board.tactical_advantage(space.theater, space.effect_value, turn)
                     if space.effect == 'bombing':
-                        board.bombing(opponent_hand, bags.axis_token_bag)
+                        board.bombing(opponent_hand, opponent_bag)
                     if space.effect == 'research':
-                        board.research(bags.allied_token_bag, bags.research_bag)
+                        board.research(player_bag, research_bag)
                     if space.effect == 'imp_research':
                         for i in range(space.effect_value):
-                            board.research(bags.allied_token_bag, bags.research_bag)
+                            board.research(player_bag, research_bag)
                     if space.effect == 'res_industry':
-                        board.research_industry(hand, bags.research_bag)
+                        board.research_industry(player_hand, research_bag)
                 # try to make this a function and careful with variable names - probs in campaign
                 camp = space.campaign.spaces
                 occupied_list = []

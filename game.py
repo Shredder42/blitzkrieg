@@ -25,7 +25,7 @@ closing campaigns
 closing theaters
 fix up axis & ally hands
 turns - keep working on them - need axis criteria on many functions
-
+    only switch turn if token is placed
     check for victory
 use the side token attribute in conjunction with turns to determine who can play token and where scores go
     assign the side to the special tokens when they are drawn into the player hand
@@ -67,8 +67,8 @@ for campaign in campaigns:
 for theater in theaters:
     theaters[theater].add_campaigns_to_theater(campaigns)
 # theaters['west_europe'].add_campaigns_to_theater(campaigns)
-print(theaters['west_europe'].campaigns)
-print(theaters['pacific'].campaigns)
+# print(theaters['west_europe'].campaigns)
+# print(theaters['pacific'].campaigns)
 
 
 # allied_1 = Token('allied', 'army', 1, 50, 800, 'allied_army_1.png')
@@ -78,14 +78,14 @@ print(theaters['pacific'].campaigns)
 
 bags = TokenBags()
 # print(bag.allied_token_bag)
-allied_hand = PlayerHand(bags.allied_token_bag)
-axis_hand = PlayerHand(bags.axis_token_bag)
-for token in allied_hand.hand_list:
-    print(f'{token.unit} value {token.value}')
-print('\n')
-print('axis hand')
-for token in axis_hand.hand_list:
-    print(f'{token.unit} value {token.value}')
+allied_hand = PlayerHand(bags.allied_token_bag, 'allied')
+axis_hand = PlayerHand(bags.axis_token_bag, 'axis')
+# for token in allied_hand.hand_list:
+#     print(f'{token.unit} value {token.value}')
+# print('\n')
+# print('axis hand')
+# for token in axis_hand.hand_list:
+#     print(f'{token.unit} value {token.value}')
 # print(bags.axis_token_bag)
     
 def end_turn(turn):
@@ -95,7 +95,7 @@ def end_turn(turn):
     elif turn == 'axis':
         game_board.industrial_production(axis_hand)
         turn = 'allied'
-
+    print('Turn:', turn)
     return turn
 
 
@@ -124,8 +124,8 @@ def main():
         # allied_4.draw(screen)
         for token in allied_hand.hand_list:
             token.draw(screen)
-        # for token in axis_hand.hand_list:
-        #     token.draw(screen)
+        for token in axis_hand.hand_list:
+            token.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -140,17 +140,24 @@ def main():
                 # allied_2.clicked_token(pos)
                 # allied_3.clicked_token(pos)
                 # allied_4.clicked_token(pos)
-                for token in allied_hand.hand_list:
-                    token.clicked_token(pos, game_board)
+                if turn == 'allied':
+                    for token in allied_hand.hand_list:
+                        token.clicked_token(pos, game_board)
+                elif turn == 'axis':
+                    for token in axis_hand.hand_list:
+                        token.clicked_token(pos, game_board)        
             
             elif event.type == pygame.MOUSEMOTION:
                 # allied_1.move_token(event)
                 # allied_2.move_token(event)
                 # allied_3.move_token(event)
                 # allied_4.move_token(event)
-                for token in allied_hand.hand_list:
-                    token.move_token(event)
-
+                if turn == 'allied':
+                    for token in allied_hand.hand_list:
+                        token.move_token(event)
+                elif turn == 'axis':
+                    for token in axis_hand.hand_list:
+                        token.move_token(event)
 
 
             elif event.type == pygame.MOUSEBUTTONUP:
@@ -159,30 +166,58 @@ def main():
                 # allied_3.place_token(game_board.battle_spaces[1])
                 # allied_4.place_token(game_board.battle_spaces[1])west_europe
                 # blitz = True
-                for token in allied_hand.hand_list:
-                    if token.moving:
-                        played_space = token.place_token(game_board, allied_hand, axis_hand, bags, theaters, turn)
-                        if token.effect == 'blitz':
-                            blitz = True
+
+                if turn == 'allied':
+                    for token in allied_hand.hand_list:
+                        if token.moving:
+                            played_space = token.place_token(game_board, allied_hand, axis_hand, bags.research_bag, bags.allied_token_bag, bags.axis_token_bag, theaters, turn)
+                            if token.effect == 'blitz':
+                                blitz = True
+                            else:
+                                blitz = False
+                            break
+
+
+                    if played_space:
+                        if played_space.effect == 'strategic':
+                            print('pick a theater')
+                            for button in game_board.theater_buttons:
+                                if button.rect.collidepoint(pos):
+                                    played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
+                                    if button.theater != played_space.theater.theater:
+                                        played_space = None
+                                        if not blitz:
+                                            turn = end_turn(turn)
+
                         else:
-                            blitz = False
-                        break
+                            if not blitz:
+                                turn = end_turn(turn)
+
+                elif turn == 'axis':
+                    for token in axis_hand.hand_list:
+                        if token.moving:
+                            played_space = token.place_token(game_board, axis_hand, allied_hand, bags.research_bag, bags.axis_token_bag, bags.allied_token_bag, theaters, turn)
+                            if token.effect == 'blitz':
+                                blitz = True
+                            else:
+                                blitz = False
+                            break
 
 
-                if played_space:
-                    if played_space.effect == 'strategic':
-                        print('pick a theater')
-                        for button in game_board.theater_buttons:
-                            if button.rect.collidepoint(pos):
-                                played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
-                                if button.theater != played_space.theater.theater:
-                                    played_space = None
-                                    if not blitz:
-                                        turn = end_turn(turn)
+                    if played_space:
+                        if played_space.effect == 'strategic':
+                            print('pick a theater')
+                            for button in game_board.theater_buttons:
+                                if button.rect.collidepoint(pos):
+                                    played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
+                                    if button.theater != played_space.theater.theater:
+                                        played_space = None
+                                        if not blitz:
+                                            turn = end_turn(turn)
 
-                    else:
-                        if not blitz:
-                            turn = end_turn(turn)
+                        else:
+                            if not blitz:
+                                turn = end_turn(turn)
                
 
         pygame.display.flip()
