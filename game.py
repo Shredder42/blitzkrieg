@@ -20,10 +20,8 @@ surface = pygame.Surface((1060, 900), pygame.SRCALPHA) # need for creating trans
 clock = pygame.time.Clock()
 
 '''
-admirals & generals
-propaganda spaces
-    victory points
 blitz tokens
+closing campaigns
 closing theaters
 fix up axis & ally hands
 turns
@@ -100,7 +98,7 @@ def main():
             space.draw(surface)
         for button in game_board.theater_buttons:
             button.draw(surface)
-    
+        game_board.draw_symbols(screen)
         for theater in theaters:
             theaters[theater].draw_track_marker(screen)
         for token in game_board.placed_tokens:
@@ -172,6 +170,8 @@ def main():
     print(len(axis_hand.hand_list))
     # print(bags.axis_token_bag)
     # print(played_space.effect)
+
+    print('allied victory points:', game_board.allied_victory_points)
 
 
 if __name__ == '__main__':

@@ -86,6 +86,9 @@ class Token:
                     space.theater.move_track_marker(space.theater.army_count - 1)
                 # battle space effects
                 if self.effect != 'task_force':
+                    if space.effect == 'propaganda':
+                        for i in range(space.effect_value):
+                            board.propaganda()
                     if space.effect == 'production':
                         board.industrial_production(hand)
                     if space.effect == 'imp_production':

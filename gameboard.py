@@ -1,3 +1,4 @@
+import os
 import pygame
 import random
 '''
@@ -218,30 +219,6 @@ class Theater:
 
 
 
-
-
-            
-
-            
-            
-
-
-
-
-        # self.campaigns = self.create_campaigns()
-
-    # def create_campaigns(self):
-    #     campaigns = {}
-    #     if self.theater in ('west_europe'):
-    #         campaigns['west_europe_1'] = Campaign('west_europe_1')
-    #         campaigns['west_europe_2'] = Campaign('west_europe_2')
-    #         campaigns['west_europe_3'] = Campaign('west_europe_3')
-    #     else: 
-    #         campaigns[1] = Campaign(1)
-    #         campaigns[2] = Campaign(2)
-    #     return campaigns
-
-
 class GameBoard:
     ''' manages game board and initializes the theaters '''
     def __init__(self, theaters, campaigns):
@@ -250,8 +227,16 @@ class GameBoard:
         self.battle_spaces = self.create_battle_spaces()
         self.theater_buttons = self.create_theater_buttons()
         self.placed_tokens = []
-        self.allied_score = 0
-        self.axis_score = 0
+        self.allied_victory_points = 0
+        self.allied_symbol = pygame.image.load(os.path.join('images', 'allied_symbol.jpg'))
+        # self.allied_symbol = pygame.transform.scale(self.allied_symbol, (12, 12))
+        self.allied_symbol_rect = self.allied_symbol.get_rect()
+        self.allied_symbol_rect = pygame.Rect(13, 58, 12, 12)
+        self.axis_victory_points = 0
+        self.axis_symbol = pygame.image.load(os.path.join('images', 'axis_symbol.jpg'))
+        # self.axis_symbol = pygame.transform.scale(self.axis_symbol, (12, 12))
+        self.axis_symbol_rect = self.axis_symbol.get_rect()
+        self.axis_symbol_rect = (13, 70, 12, 12)
 
     def create_battle_spaces(self):
         spaces = []
@@ -308,6 +293,20 @@ class GameBoard:
         buttons.append(TheaterButton(730, 547, 175, 25, 'asia'))
 
         return buttons
+    
+    def draw_symbols(self, surface):
+        surface.blit(self.allied_symbol, self.allied_symbol_rect)
+        surface.blit(self.axis_symbol, self.axis_symbol_rect)
+
+    def draw(self, surface):
+        return surface.blit(self.image, self.rect)
+    
+    def propaganda(self):
+        self.allied_victory_points += 1       
+        if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
+            self.allied_symbol_rect.x += 28
+        elif self.allied_victory_points == 16:
+            self.allied_symbol_rect = (41, 73, 12, 12)           
 
     def industrial_production(self, hand):
         hand.draw_new_token()
