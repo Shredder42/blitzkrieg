@@ -74,16 +74,22 @@ class Token:
                 space.theater.adjust_unit_count(self, turn)
                 space.theater.move_track_marker(self.value, turn)
                 # token effects
-                if self.effect == 'blitz':
-                    print('place another token') #implement this when handling turns
+                # if self.effect == 'blitz':
+                    # print('place another token') #implement this when handling turns
                 if self.effect == 'bombing':
                     board.bombing(opponent_hand, opponent_bag)
-                if self.effect == 'blitz':
+                if self.effect == 'nuclear':
                     space.theater.move_track_marker_nuclear(theaters, turn)
                 if self.effect == 'admiral':
-                    space.theater.move_track_marker(space.theater.navy_count - 1, turn)
+                    if turn == 'axis':
+                        space.theater.move_track_marker(space.theater.axis_navy_count - 1, turn)
+                    elif turn == 'allied':
+                        space.theater.move_track_marker(space.theater.allied_navy_count - 1, turn)
                 if self.effect == 'general':
-                    space.theater.move_track_marker(space.theater.army_count - 1, turn)
+                    if turn == 'axis':
+                        space.theater.move_track_marker(space.theater.axis_army_count - 1, turn)
+                    elif turn == 'allied':
+                        space.theater.move_track_marker(space.theater.allied_army_count - 1, turn)
                 # battle space effects
                 if self.effect != 'task_force':
                     if space.effect == 'propaganda':
@@ -132,6 +138,7 @@ class Token:
         else:
             self.rect.x = self.original_x
             self.rect.y = self.original_y
+            space = None
 
         self.moving = False
 
