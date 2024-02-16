@@ -78,8 +78,8 @@ class Token:
                     print('place another token') #implement this when handling turns
                 if self.effect == 'bombing':
                     board.bombing(opponent_hand, opponent_bag)
-                if self.effect == 'nuclear':
-                    space.theater.move_track_marker_nuclear(theaters)
+                if self.effect == 'blitz':
+                    space.theater.move_track_marker_nuclear(theaters, turn)
                 if self.effect == 'admiral':
                     space.theater.move_track_marker(space.theater.navy_count - 1, turn)
                 if self.effect == 'general':
@@ -88,7 +88,7 @@ class Token:
                 if self.effect != 'task_force':
                     if space.effect == 'propaganda':
                         for i in range(space.effect_value):
-                            board.propaganda()
+                            board.propaganda(turn)
                     if space.effect == 'production':
                         board.industrial_production(player_hand)
                     if space.effect == 'imp_production':

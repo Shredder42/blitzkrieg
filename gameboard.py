@@ -194,48 +194,107 @@ class Theater:
                             self.score_track_y -= 20    
                         elif self.theater_score >= -9:
                             self.score_track_x -= 20
-                        elif self.theater_score >= -10:
+                        elif self.theater_score <= -10:
                             self.score_track_y += 20
                         if self.theater_score == -11:
                             self.available = False # closes theather
 
         print(self.theater_score)
 
-    def move_track_marker_nuclear(self, theaters):
+    def move_track_marker_nuclear(self, theaters, turn):
         print(type(theaters))
         for i in range(2):
-            for k, v in theaters.items():                
-                if k != self.theater:
-                    if k in ('west_europe', 'pacific', 'east_europe'):
-                        if v.theater_score <= 13:
-                            v.theater_score -= 1
-                        if v.theater_score <= 9:
-                            v.score_track_x -= 20
-                        elif v.theater_score <= 12:
-                            v.score_track_y -= 20
-                    if k in ('africa', 'asia'):
-                        if v.theater_score <= 10:
-                            v.theater_score -= 1
-                        if v.theater_score <= 8:
-                            v.score_track_x -= 20
-                        elif v.theater_score == 9:
-                            v.score_track_y -= 20
+            if turn == 'axis':
+                for k, v in theaters.items():                
+                    if k != self.theater:
+                        if k in ('west_europe', 'pacific', 'east_europe'):
+                            if v.theater_score >= -12 and v.theater_score <= 13:
+                                v.theater_score -= 1
+                                if v.theater_score <= -11:
+                                    v.score_track_y += 20
+                                elif v.theater_score <= 9:
+                                    v.score_track_x -= 20
+                                elif v.theater_score <= 12:
+                                    v.score_track_y -= 20
+                            
+                        if k in ('africa', 'asia'):
+                            if v.theater_score >= -9 and v.theater_score <= 10:
+                                v.theater_score -= 1
+                                if v.theater_score == -10:
+                                    v.score_track_y += 20
+                                elif v.theater_score <= 8:
+                                    v.score_track_x -= 20
+                                elif v.theater_score == 9:
+                                    v.score_track_y -= 20
+
+                    print(k, v.theater_score)
+
+            elif turn == 'allied':
+                for k, v in theaters.items():                
+                    if k != self.theater:
+                        if k in ('west_europe', 'pacific', 'east_europe'):
+                            if v.theater_score >= -13 and v.theater_score <= 12:
+                                v.theater_score += 1
+                                if v.theater_score >= 11:
+                                    v.score_track_y += 20
+                                elif v.theater_score >= -9:
+                                    v.score_track_x += 20
+                                elif v.theater_score >= -12:
+                                    v.score_track_y -= 20
+
+                        if k in ('africa', 'asia'):
+                            if v.theater_score >= -10 and v.theater_score <= 9:
+                                v.theater_score += 1
+                                if v.theater_score == 10:
+                                    v.score_track_y += 20
+                                elif v.theater_score >= -8:
+                                    v.score_track_x += 20
+                                elif v.theater_score == -9:
+                                    v.score_track_y -= 20
+                    print(k, v.theater_score)
     
-    def move_track_marker_strategic(self, theaters, space_value, selected_theater):
+    def move_track_marker_strategic(self, theaters, space_value, selected_theater, turn):
         for k, v in theaters.items():   
             if k != self.theater and k == selected_theater:
                 for i in range(space_value):
-                    v.theater_score += 1
-                    if k in ('west_europe', 'pacific', 'east_europe'):
-                        if v.theater_score <= 10:
-                            v.score_track_x += 20
-                        elif v.theater_score <= 13:
-                            v.score_track_y += 20
-                    if k in ('africa', 'asia'):
-                        if v.theater_score <= 9:
-                            v.score_track_x += 20
-                        elif v.theater_score <= 10:
-                            v.score_track_y += 20
+                    if turn == 'axis':
+                        if k in ('west_europe', 'pacific', 'east_europe'):
+                            if v.theater_score >= -13 and v.theater_score <= 12:
+                                v.theater_score += 1
+                                if v.theater_score >= 11:
+                                    v.score_track_y += 20 
+                                elif v.theater_score >= -9:
+                                    v.score_track_x += 20
+                                elif v.theater_score >= -12:
+                                    v.score_track_y -= 20
+                        elif k in ('africa', 'asia'):
+                            if v.theater_score >= -10 and v.theater_score <= 9:
+                                v.theater_score += 1
+                                if v.theater_score == 10:
+                                    v.score_track_y += 20
+                                elif v.theater_score >= -8:
+                                    v.score_track_x += 20  
+                                elif v.theater_score == -9:
+                                    v.score_track_y -= 20
+                    elif turn == 'allied':
+                        if k in ('west_europe', 'pacific', 'east_europe'):
+                            if v.theater_score >= -12 and v.theater_score <= 13:
+                                v.theater_score -= 1
+                                if v.theater_score <= -11:
+                                    v.score_track_y += 20
+                                elif v.theater_score <= 9:
+                                    v.score_track_x -= 20
+                                elif v.theater_score <= 13:
+                                    v.score_track_y += 20
+                        elif k in ('africa', 'asia'):
+                            if v.theater_score >= -9 and v.theater_score <= 10:
+                                v.theater_score -= 1
+                                if v.theater_score == -10:
+                                    v.score_track_y += 20
+                                elif v.theater_score <= 8:
+                                    v.score_track_x -= 20
+                                elif v.theater_score <= 9:
+                                    v.score_track_y -= 20
 
     def adjust_unit_count(self, token, turn):
         if not token.special:
@@ -267,16 +326,15 @@ class GameBoard:
         self.battle_spaces = self.create_battle_spaces()
         self.theater_buttons = self.create_theater_buttons()
         self.placed_tokens = []
-        self.allied_victory_points = 0
-        self.allied_symbol = pygame.image.load(os.path.join('images', 'allied_symbol.jpg'))
-        # self.allied_symbol = pygame.transform.scale(self.allied_symbol, (12, 12))
-        self.allied_symbol_rect = self.allied_symbol.get_rect()
-        self.allied_symbol_rect = pygame.Rect(13, 58, 12, 12)
         self.axis_victory_points = 0
         self.axis_symbol = pygame.image.load(os.path.join('images', 'axis_symbol.jpg'))
-        # self.axis_symbol = pygame.transform.scale(self.axis_symbol, (12, 12))
         self.axis_symbol_rect = self.axis_symbol.get_rect()
-        self.axis_symbol_rect = (13, 70, 12, 12)
+        self.axis_symbol_rect = pygame.Rect(13, 58, 12, 12)
+        self.allied_victory_points = 0
+        self.allied_symbol = pygame.image.load(os.path.join('images', 'allied_symbol.jpg'))
+        self.allied_symbol_rect = self.allied_symbol.get_rect()
+        self.allied_symbol_rect = pygame.Rect(13, 70, 12, 12)
+
 
     def create_battle_spaces(self):
         spaces = []
@@ -341,12 +399,19 @@ class GameBoard:
     def draw(self, surface):
         return surface.blit(self.image, self.rect)
     
-    def propaganda(self):
-        self.allied_victory_points += 1       
-        if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
-            self.allied_symbol_rect.x += 28
-        elif self.allied_victory_points == 16:
-            self.allied_symbol_rect = (41, 73, 12, 12)           
+    def propaganda(self, turn):
+        if turn == 'axis':
+            self.axis_victory_points += 1       
+            if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                self.axis_symbol_rect.x += 28
+            elif self.axis_victory_points == 16:
+                self.axis_symbol_rect = pygame.Rect(41, 73, 12, 12)  
+        elif turn == 'allied':
+            self.allied_victory_points += 1       
+            if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
+                self.allied_symbol_rect.x += 28
+            elif self.allied_victory_points == 16:
+                self.allied_symbol_rect = pygame.Rect(41, 85, 12, 12)           
 
     def industrial_production(self, hand):
         hand.draw_new_token()
@@ -366,10 +431,7 @@ class GameBoard:
     def research_industry(self, hand, research_bag):
         hand.hand_list.append(research_bag.pop())
         random.shuffle(research_bag)
-        for i, token in enumerate((hand.hand_list)):
-            x = 50 + i * 60
-            y = 800
-            token.token_starting_location(x, y) 
+
 
 
 

@@ -20,16 +20,21 @@ surface = pygame.Surface((1060, 900), pygame.SRCALPHA) # need for creating trans
 clock = pygame.time.Clock()
 
 '''
-blitz tokens (in conjuncion with turns)
+blitz tokens
 closing campaigns
 closing theaters
 fix up axis & ally hands
 turns - keep working on them - need axis criteria on many functions
-    only switch turn if token is placed
+    nuclear
+    admiral & general
+    strategic
+    only switch turn if token is placed - this is big
     check for victory
 use the side token attribute in conjunction with turns to determine who can play token and where scores go
     assign the side to the special tokens when they are drawn into the player hand
 figure out playing over internet?
+check for correct victory point tracking after getting closing campaigns implemented
+test task force
 '''
 
 theaters = {
@@ -87,6 +92,8 @@ axis_hand = PlayerHand(bags.axis_token_bag, 'axis')
 # for token in axis_hand.hand_list:
 #     print(f'{token.unit} value {token.value}')
 # print(bags.axis_token_bag)
+# for token in bags.axis_token_bag:
+#     print(token.special)
     
 def end_turn(turn):
     if turn == 'allied':
@@ -183,7 +190,7 @@ def main():
                             print('pick a theater')
                             for button in game_board.theater_buttons:
                                 if button.rect.collidepoint(pos):
-                                    played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
+                                    played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     if button.theater != played_space.theater.theater:
                                         played_space = None
                                         if not blitz:
@@ -209,7 +216,7 @@ def main():
                             print('pick a theater')
                             for button in game_board.theater_buttons:
                                 if button.rect.collidepoint(pos):
-                                    played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater)
+                                    played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     if button.theater != played_space.theater.theater:
                                         played_space = None
                                         if not blitz:
@@ -232,6 +239,8 @@ def main():
     print(len(axis_hand.hand_list))
     # print(bags.axis_token_bag)
     # print(played_space.effect)
+    # for token in bags.axis_token_bag:
+    #     print(token.special)
 
     print('allied victory points:', game_board.allied_victory_points)
     print(turn)
