@@ -42,8 +42,11 @@ class Token:
             if self.effect == 'spy':
                 last_token = board.placed_tokens[-1]
                 self.unit = last_token.unit
+                print(last_token.unit)
                 self.value = last_token.value
+                print(last_token.value)
                 self.effect = last_token.effect
+                print(last_token.effect)
 
     def move_token(self, event):
         if self.moving:
@@ -134,6 +137,7 @@ class Token:
 
                 # played_theater = space.theater
                 # space_value = space.effect_value
+
                 break
         else:
             self.rect.x = self.original_x
