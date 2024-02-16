@@ -23,7 +23,7 @@ clock = pygame.time.Clock()
 closing campaigns
 closing theaters
 fix up axis & ally hands - is this done????
-turns - keep working on them
+turns - keep working on them - hopefully in good shape but keep paying attention
     check for victory
 use the side token attribute in conjunction with turns to determine who can play token and where scores go
     assign the side to the special tokens when they are drawn into the player hand
@@ -179,14 +179,14 @@ def main():
                                 blitz = True
                             else:
                                 blitz = False
-                            # if token.effect == 'task_force':
-                            #     task_force = True
-                            # else:
-                            #     task_force = False
+                            if token.effect == 'task_force':
+                                task_force = True
+                            else:
+                                task_force = False
                             break
 
                         # print(token.effect)
-                    if played_space:# and not task_force:
+                    if played_space and not task_force:
                         if played_space.effect == 'strategic':                            
                             for button in game_board.theater_buttons:
                                 if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
@@ -206,8 +206,8 @@ def main():
                                 turn, played_space = end_turn(turn, played_space)
                             else:
                                 print('place another token')
-                    # elif played_space:
-                    #     turn = end_turn(turn)
+                    elif played_space:
+                        turn, played_space = end_turn(turn, played_space)
 
 
                 elif turn == 'allied':
@@ -218,14 +218,14 @@ def main():
                                 blitz = True
                             else:
                                 blitz = False
-                            # if token.effect == 'task_force':
-                            #     task_force = True
-                            # else:
-                            #     task_force = False
+                            if token.effect == 'task_force':
+                                task_force = True
+                            else:
+                                task_force = False
                             break
 
                     # print(played_space.effect)
-                    if played_space: #and not task_force:
+                    if played_space and not task_force:
                         if played_space.effect == 'strategic':
                             for button in game_board.theater_buttons :
                                 if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
@@ -244,8 +244,8 @@ def main():
                                 turn, played_space = end_turn(turn, played_space)
                             else:
                                 print('place another token')
-                    # elif played_space:
-                    #     turn = end_turn(turn)
+                    elif played_space:
+                        turn, played_space = end_turn(turn, played_space)
 
 
                
