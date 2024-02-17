@@ -442,7 +442,6 @@ class GameBoard:
         random.shuffle(research_bag)
 
     def campaign_victory_points(self, campaign, theater):
-        print('victory points run')
         if theater.theater_score == 0:
             for i in range(campaign.victory_points):
                 self.axis_victory_points += 1       
@@ -480,7 +479,7 @@ class GameBoard:
             elif theater.theater_score >= -4 and theater.theater_score <= -1:
                 for i in range(campaign.victory_points):
                     self.allied_victory_points += 1       
-                    if self.allied_victory_points <= 15 or self.axis_victory_points > 16:
+                    if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
                         self.allied_symbol_rect.x += 28
                     elif self.allied_victory_points == 16:
                         self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)  
@@ -489,8 +488,8 @@ class GameBoard:
                     self.allied_victory_points += 1       
                     if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
                         self.allied_symbol_rect.x += 28
-                    elif self.axis_victory_points == 16:
-                        self.axis_symbol_rect = pygame.Rect(41, 97, 12, 12) 
+                    elif self.allied_victory_points == 16:
+                        self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12) 
             elif theater.theater_score <= -10:
                 for i in range(campaign.victory_points + 2):
                     self.allied_victory_points += 1       
@@ -523,7 +522,7 @@ class GameBoard:
             elif theater.theater_score >= -3 and theater.theater_score <= -1:
                 for i in range(campaign.victory_points):
                     self.allied_victory_points += 1       
-                    if self.allied_victory_points <= 15 or self.axis_victory_points > 16:
+                    if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
                         self.allied_symbol_rect.x += 28
                     elif self.allied_victory_points == 16:
                         self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)  
@@ -532,8 +531,8 @@ class GameBoard:
                     self.allied_victory_points += 1       
                     if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
                         self.allied_symbol_rect.x += 28
-                    elif self.axis_victory_points == 16:
-                        self.axis_symbol_rect = pygame.Rect(41, 97, 12, 12) 
+                    elif self.allied_victory_points == 16:
+                        self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12) 
             elif theater.theater_score <= -8:
                 for i in range(campaign.victory_points + 2):
                     self.allied_victory_points += 1       
@@ -541,6 +540,7 @@ class GameBoard:
                         self.allied_symbol_rect.x += 28
                     elif self.allied_victory_points == 16:
                         self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)
+        print(f'axis {self.axis_victory_points}: allied {self.allied_victory_points}')
 
 
 

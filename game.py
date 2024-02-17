@@ -23,9 +23,11 @@ clock = pygame.time.Clock()
 closing theaters
 fix up axis & ally hands - is this done????
 turns - keep working on them - hopefully in good shape but keep paying attention
-    check for victory
+    check for victory - socre may be off - looked better this time
+        availability doesn't work
 use the side token attribute in conjunction with turns to determine who can play token and where scores go
     assign the side to the special tokens when they are drawn into the player hand
+nuclear bomb moved back axis score on theater with all tiles placed
 figure out playing over internet?
 '''
 
@@ -87,16 +89,74 @@ axis_hand = PlayerHand(bags.axis_token_bag, 'axis')
 # for token in bags.axis_token_bag:
 #     print(token.special)
     
-def end_turn(turn, played_space):
+def end_turn(turn, played_space, game_board, axis_hand, allied_hand, run):
     if turn == 'allied':
-        game_board.industrial_production(allied_hand)
-        turn = 'axis'
+        # check for winning on points
+        winner = check_for_victory_points(game_board)
+        # if game_board.axis_victory_points >= 25 or game_board.allied_victory_points >= 25:
+        #     if game_board.axis_victory_points > game_board.allied_victory_points:
+        if winner == 'axis':
+            print(f'Axis forces win the war: {game_board.axis_victory_points} - {game_board.allied_victory_points}')
+            run = False
+        elif winner == 'allies':
+            print(f'Allied forces win the war: {game_board.allied_victory_points} - {game_board.axis_victory_points}')
+            run = False
+        else:
+            game_board.industrial_production(allied_hand)
+            # if check_for_victory_availabilty(game_board, axis_hand.hand_list):
+            turn = 'axis'
+            # else:
+            #     print('Allied forces win the war. Axis commander out of options')
+                # run = False
     elif turn == 'axis':
         game_board.industrial_production(axis_hand)
+        # if check_for_victory_availabilty(game_board, allied_hand.hand_list):
         turn = 'allied'
+        # else:
+        #     print('Axis forces win the war. Allied commander out of options')
+        #     run = False
+
     played_space = None
     print('Turn:', turn)
-    return turn, played_space
+    return turn, played_space, run
+
+def check_for_victory_points(game_board):
+    winner = None
+    if game_board.axis_victory_points >= 25 or game_board.allied_victory_points >= 25:
+        if game_board.axis_victory_points > game_board.allied_victory_points:
+            winner = 'axis'
+        else:
+            winner = 'allies'
+
+    return winner
+
+
+def check_for_victory_availabilty(game_board, hand):
+    available_list = []
+    available_move = True
+    for space in game_board.battle_spaces:
+        if not space.occupied and space.theater.available and space.campaign.available:
+            available_list.append(space)
+    for token in hand:
+        if token.effect == 'scientist':
+            for theater in game_board.theaters.values():
+                if theater.available:
+                    available_move = True
+                    break
+        else:
+            for space in available_list:
+                if token.effect == 'spy' and game_board.placed_tokens[-1].match_type_and_unit(space):
+                    available_move = True
+                    break
+                elif token.match_type_and_unit(space):
+                    available_move = True
+                    break
+    else:
+        available_move = False
+
+    return available_move
+
+
 
 
 def main():
@@ -190,7 +250,7 @@ def main():
                                     played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     # played_space = None
                                     if not blitz:
-                                        turn, played_space = end_turn(turn, played_space)
+                                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
                                     else:
                                         print('place another token')
                                     break
@@ -200,11 +260,11 @@ def main():
                         else:
                             # played_space = None
                             if not blitz:
-                                turn, played_space = end_turn(turn, played_space)
+                                turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
                             else:
                                 print('place another token')
                     elif played_space:
-                        turn, played_space = end_turn(turn, played_space)
+                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
 
 
                 elif turn == 'allied':
@@ -229,7 +289,7 @@ def main():
                                     played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     # played_space = None
                                     if not blitz:
-                                        turn, played_space = end_turn(turn, played_space)
+                                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
                                     else:
                                         print('place another token')
                                     break
@@ -238,11 +298,11 @@ def main():
                                 
                         else:
                             if not blitz:
-                                turn, played_space = end_turn(turn, played_space)
+                                turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
                             else:
                                 print('place another token')
                     elif played_space:
-                        turn, played_space = end_turn(turn, played_space)
+                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
 
 
                
