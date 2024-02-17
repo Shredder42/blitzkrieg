@@ -122,6 +122,9 @@ class Token:
                 if all(occupied_list):
                     print('All campaign spaces full')
                     space.campaign.available = False
+                    board.campaign_victory_points(space.campaign, space.theater)
+                    # for i in range(space.campaign.victory_points):
+                    #     board.propaganda(turn)
                     # print(space.campaign.available)
                     # print(camp)
                     # print(space.theater.campaigns)

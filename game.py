@@ -20,7 +20,6 @@ surface = pygame.Surface((1060, 900), pygame.SRCALPHA) # need for creating trans
 clock = pygame.time.Clock()
 
 '''
-closing campaigns
 closing theaters
 fix up axis & ally hands - is this done????
 turns - keep working on them - hopefully in good shape but keep paying attention
@@ -28,8 +27,6 @@ turns - keep working on them - hopefully in good shape but keep paying attention
 use the side token attribute in conjunction with turns to determine who can play token and where scores go
     assign the side to the special tokens when they are drawn into the player hand
 figure out playing over internet?
-check for correct victory point tracking after getting closing campaigns implemented
-test task force
 '''
 
 theaters = {
@@ -40,19 +37,19 @@ theaters = {
     'asia': Theater('asia', 817, 589)
 }
 campaigns = {
-    'northern_west_europe': Campaign('northern_west_europe', 1, True),
-    'central_west_europe': Campaign('central_west_europe', 2,),
-    'southern_west_europe': Campaign('southern_west_europe', 3),
-    'northern_pacific': Campaign('northern_pacific', 1, True),
-    'central_pacific': Campaign('central_pacific', 2),
-    'southern_pacific': Campaign('southern_pacific', 3),
-    'northern_east_europe': Campaign('northern_east_europe', 1, True),
-    'central_east_europe': Campaign('central_east_europe', 2),
-    'southern_east_europe': Campaign('southern_east_europe', 3),
-    'northern_africa': Campaign('northern_africa', 1, True),
-    'southern_africa': Campaign('southern_africa', 2),
-    'northern_asia': Campaign('northern_asia', 1, True),
-    'southern_asia': Campaign('southern_asia', 2)
+    'northern_west_europe': Campaign('northern_west_europe', 2, True),
+    'central_west_europe': Campaign('central_west_europe', 3,),
+    'southern_west_europe': Campaign('southern_west_europe', 5),
+    'northern_pacific': Campaign('northern_pacific', 2, True),
+    'central_pacific': Campaign('central_pacific', 3),
+    'southern_pacific': Campaign('southern_pacific', 5),
+    'northern_east_europe': Campaign('northern_east_europe', 2, True),
+    'central_east_europe': Campaign('central_east_europe', 3),
+    'southern_east_europe': Campaign('southern_east_europe', 6),
+    'northern_africa': Campaign('northern_africa', 3, True),
+    'southern_africa': Campaign('southern_africa', 5),
+    'northern_asia': Campaign('northern_asia', 2, True),
+    'southern_asia': Campaign('southern_asia', 4)
 }
 
 

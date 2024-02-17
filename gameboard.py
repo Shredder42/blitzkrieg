@@ -55,9 +55,9 @@ class BattleSpace:
 
 class Campaign:
     ''' manages campaigns and initializes battle spaces '''
-    def __init__(self, campaign, rank, available = False):
+    def __init__(self, campaign, victory_points, available = False):
         self.campaign = campaign
-        self.rank = rank
+        self.victory_points = victory_points
         self.available = available
         self.complete = False
         self.spaces = []
@@ -110,6 +110,15 @@ class Campaign:
     #         spaces.append(BattleSpace2(258, 207, 'research', 1, 'land')        self.track_markers)
     #         spaces.append(BattleSpace2(320, 207, 'propaganda', 1,  'both'))
     #     return spaces
+    # def close_campaign(self, game_board, turn):
+    #     occupied_list = []
+    #     for space in self.spaces:
+    #         occupied_list.append(space.occupied)
+    #     if all(occupied_list):
+    #         for i in range(self.victory_points):
+    #             game_board.propaganda(turn)
+
+
 
 
 
@@ -405,13 +414,13 @@ class GameBoard:
             if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
                 self.axis_symbol_rect.x += 28
             elif self.axis_victory_points == 16:
-                self.axis_symbol_rect = pygame.Rect(41, 73, 12, 12)  
+                self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12)  
         elif turn == 'allied':
             self.allied_victory_points += 1       
             if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
                 self.allied_symbol_rect.x += 28
             elif self.allied_victory_points == 16:
-                self.allied_symbol_rect = pygame.Rect(41, 85, 12, 12)           
+                self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)           
 
     def industrial_production(self, hand):
         hand.draw_new_token()
@@ -431,6 +440,109 @@ class GameBoard:
     def research_industry(self, hand, research_bag):
         hand.hand_list.append(research_bag.pop())
         random.shuffle(research_bag)
+
+    def campaign_victory_points(self, campaign, theater):
+        print('victory points run')
+        if theater.theater_score == 0:
+            for i in range(campaign.victory_points):
+                self.axis_victory_points += 1       
+                if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                    self.axis_symbol_rect.x += 28
+                elif self.axis_victory_points == 16:
+                    self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12)
+                self.allied_victory_points += 1       
+                if self.allied_victory_points <= 15 or self.axis_victory_points > 16:
+                    self.allied_symbol_rect.x += 28
+                elif self.allied_victory_points == 16:
+                    self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12) 
+        if theater.theater in ('west_europe', 'pacific', 'east_europe'):
+            if theater.theater_score >= 1 and theater.theater_score <= 4:
+                for i in range(campaign.victory_points):
+                    self.axis_victory_points += 1       
+                    if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.axis_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12)  
+            elif theater.theater_score >= 5 and theater.theater_score <= 9:
+                for i in range(campaign.victory_points + 1):
+                    self.axis_victory_points += 1       
+                    if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.axis_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12) 
+            elif theater.theater_score >= 10:
+                for i in range(campaign.victory_points + 2):
+                    self.axis_victory_points += 1       
+                    if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.axis_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12)
+            elif theater.theater_score >= -4 and theater.theater_score <= -1:
+                for i in range(campaign.victory_points):
+                    self.allied_victory_points += 1       
+                    if self.allied_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.allied_symbol_rect.x += 28
+                    elif self.allied_victory_points == 16:
+                        self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)  
+            elif theater.theater_score >= -9 and theater.theater_score <= -5:
+                for i in range(campaign.victory_points + 1):
+                    self.allied_victory_points += 1       
+                    if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
+                        self.allied_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 97, 12, 12) 
+            elif theater.theater_score <= -10:
+                for i in range(campaign.victory_points + 2):
+                    self.allied_victory_points += 1       
+                    if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
+                        self.allied_symbol_rect.x += 28
+                    elif self.allied_victory_points == 16:
+                        self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)  
+        elif theater.theater in ('africa', 'asia'):
+            if theater.theater_score >= 1 and theater.theater_score <= 3:
+                for i in range(campaign.victory_points):
+                    self.axis_victory_points += 1       
+                    if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.axis_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12)  
+            elif theater.theater_score >= 4 and theater.theater_score <= 7:
+                for i in range(campaign.victory_points + 1):
+                    self.axis_victory_points += 1       
+                    if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.axis_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12) 
+            elif theater.theater_score >= 8:
+                for i in range(campaign.victory_points + 2):
+                    self.axis_victory_points += 1       
+                    if self.axis_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.axis_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 85, 12, 12)
+            elif theater.theater_score >= -3 and theater.theater_score <= -1:
+                for i in range(campaign.victory_points):
+                    self.allied_victory_points += 1       
+                    if self.allied_victory_points <= 15 or self.axis_victory_points > 16:
+                        self.allied_symbol_rect.x += 28
+                    elif self.allied_victory_points == 16:
+                        self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)  
+            elif theater.theater_score >= -7 and theater.theater_score <= -4:
+                for i in range(campaign.victory_points + 1):
+                    self.allied_victory_points += 1       
+                    if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
+                        self.allied_symbol_rect.x += 28
+                    elif self.axis_victory_points == 16:
+                        self.axis_symbol_rect = pygame.Rect(41, 97, 12, 12) 
+            elif theater.theater_score <= -8:
+                for i in range(campaign.victory_points + 2):
+                    self.allied_victory_points += 1       
+                    if self.allied_victory_points <= 15 or self.allied_victory_points > 16:
+                        self.allied_symbol_rect.x += 28
+                    elif self.allied_victory_points == 16:
+                        self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)
+
+
 
 
 
