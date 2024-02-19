@@ -165,7 +165,7 @@ class Theater:
         
     def move_track_marker(self, value, turn):
         # self.theater_score += token_value
-        if self.theater_score > -14 and self.theater_score < 14:
+        if self.theater_score > -14 and self.theater_score < 14: # put this in with each set of theaters (i.e. not over africa & asia)
             for i in range(value):
                 if turn == 'axis':
                     self.theater_score += 1
@@ -183,10 +183,10 @@ class Theater:
                             self.score_track_y -= 20
                         elif self.theater_score <= 9:
                             self.score_track_x += 20
-                        elif self.theater_score >= 10:
+                        elif self.theater_score >= 10 and self.theater_score < 12:
                             self.score_track_y += 20
-                        if self.theater_score == 11:
-                            self.available = False # closes theather
+                        # if self.theater_score == 11:
+                        #     self.available = False # closes theather
                 elif turn == 'allied':
                     self.theater_score -= 1
                     if self.theater in ('west_europe', 'pacific', 'east_europe'):
@@ -203,10 +203,10 @@ class Theater:
                             self.score_track_y -= 20    
                         elif self.theater_score >= -9:
                             self.score_track_x -= 20
-                        elif self.theater_score <= -10:
+                        elif self.theater_score <= -10 and self.theater_score > -12:
                             self.score_track_y += 20
-                        if self.theater_score == -11:
-                            self.available = False # closes theather
+                        # if self.theater_score == -11:
+                        #     self.available = False # closes theather
 
         print('theater score:', self.theater_score)
 

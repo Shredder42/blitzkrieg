@@ -21,6 +21,7 @@ clock = pygame.time.Clock()
 
 '''
 closing theaters
+    copy to allies
     points for campaigns closed in closed theathers
 score tracker is off on africa and asia on the axis wining side - doesn't move up from 10 to 11 when place token
 
@@ -264,12 +265,12 @@ def main():
                             else:
                                 closed_theater = False
                             print('closed theater', closed_theater)
-                            # print(available_list)
-                            if played_space:
-                                print(played_space.effect)
-                                print(played_space.theater.theater)
-                                print(played_space.campaign.campaign)
-                                print(played_space.effect_value)
+                            print(available_list)
+                            # if played_space:
+                            #     print(played_space.effect)
+                            #     print(played_space.theater.theater)
+                            #     print(played_space.campaign.campaign)
+                            #     print(played_space.effect_value)
                             break
 
                         # print(token.effect)
@@ -321,31 +322,37 @@ def main():
                         # strategic = False
                         for battle_space in available_list:
                             if battle_space.rect.collidepoint(pos) and not strategic:
-                                # if battle_space.effect == 'propaganda':
-                                #     for i in range(battle_space.effect_value):
-                                #         game_board.propaganda(turn)
+                                if battle_space.effect == 'propaganda':
+                                    for i in range(battle_space.effect_value):
+                                        game_board.propaganda(turn)
+                                    available_list.remove(battle_space)
                                 if battle_space.effect == 'production':
                                     game_board.industrial_production(axis_hand)
                                     available_list.remove(battle_space)
-                                # if battle_space.effect == 'imp_production':
-                                #     for i in range(space.effect_value):
-                                #         game_board.industrial_production(axis_hand)
+                                if battle_space.effect == 'imp_production':
+                                    for i in range(battle_space.effect_value):
+                                        game_board.industrial_production(axis_hand)
+                                    available_list.remove(battle_space)
                                 # if battle_space.effect == 'tactical':
                                 #     game_board.tactical_advantage(battle_space.theater, battle_space.effect_value, turn)
+                                #     available_list.remove(battle_space)
                                 if battle_space.effect == 'bombing':
                                     game_board.bombing(allied_hand, bags.allied_token_bag)
                                     available_list.remove(battle_space)
-                                # if battle_space.effect == 'research':
-                                #     game_board.research(bags.axis_token_bag, bags.research_bag)
-                                # if battle_space.effect == 'imp_research':
-                                #     for i in range(battle_space.effect_value):
-                                #         game_board.research(bags.axis_token_bag, bags.research_bag)
+                                if battle_space.effect == 'research':
+                                    game_board.research(bags.axis_token_bag, bags.research_bag)
+                                    available_list.remove(battle_space)
+                                if battle_space.effect == 'imp_research':
+                                    for i in range(battle_space.effect_value):
+                                        game_board.research(bags.axis_token_bag, bags.research_bag)
+                                    available_list.remove(battle_space)
                                 if battle_space.effect == 'res_industry':
                                     print('clicked on res ind')
                                     game_board.research_industry(axis_hand, bags.research_bag, turn)
                                     available_list.remove(battle_space)
                                 if battle_space.effect == 'strategic': 
                                     strategic = True
+                                    available_list.remove(battle_space)
                                 battle_space.occupied = True
                                 # if battle_space.occupied:
                                 #     available_list.remove(battle_space)
@@ -359,11 +366,19 @@ def main():
                                     # print(battle_space.theater.theater)
                                     # print(battle_space.effect)
                                     # print(battle_space.effect_value)
-                                    # strategic = False
-                                    available_list.remove(battle_space)
+                                    strategic = False
+                                    # available_list.remove(battle_space)
                                     break
                             else:
                                 print('pick a theater')
+                        # new campaign points here
+                        # occupied_list = []
+                        # for item in space.campaign.spaces:
+                        #     occupied_list.append(item.occupied)
+                        # if all(occupied_list):
+                        #     print('All campaign spaces full')
+                        #     space.campaign.available = False
+                        #     board.campaign_victory_points(space.campaign, space.theater)
                         
                         if not available_list:
                             turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)                        

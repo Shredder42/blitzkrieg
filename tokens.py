@@ -148,15 +148,34 @@ class Token:
                 # closing theater               
                 # played_theater = space.theater
                 # available_list = []
-                if abs(space.theater.theater_score) >= 14:
+                if (abs(space.theater.theater_score) >= 14 and space.theater.theater in ('west_europe', 'pacific', 'east_europe')):
                     if space.theater.available:
                         for campaign in space.theater.campaigns:
                             for space in campaign.spaces:
-                                if not space.occupied and space.effect != 'blank':
+                                if not space.occupied and space.effect != 'blank' and space.effect != 'tactical':
                                     available_list.append(space)
+                                # new campaign points below
+                                    # this one should just give the campaing points if there is nothing to click on
+                                else:
+                                    space.occupied = True
+                                    occupied_list = [] #this isn't in correct spot
+                                    for item in space.campaign.spaces:
+                                        occupied_list.append(item.occupied)
+                                    if all(occupied_list):
+                                        # print('All campaign spaces full')
+                                        # space.campaign.available = False
+                                        board.campaign_victory_points(space.campaign, space.theater)
                         space.theater.available = False
                         print('theater close tokens')
                 # space_value = space.effect_value
+                elif (abs(space.theater.theater_score) >= 11 and space.theater.theater in ('africa', 'asia')):
+                    print('CLOSED AFRICA OR ASIA!!!')
+                    if space.theater.available:
+                        for campaign in space.theater.campaigns:
+                            for space in campaign.spaces:
+                                if not space.occupied and space.effect != 'blank' and space.effect != 'tactical':
+                                    available_list.append(space)
+                        space.theater.available = False
 
                 break
                 # print(space.effect)
