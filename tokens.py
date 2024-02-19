@@ -62,6 +62,8 @@ class Token:
             return False
 
     def place_token(self, board, player_hand, opponent_hand, research_bag, player_bag, opponent_bag, theaters, turn):
+        available_list = []
+        played_space = None
         for space in board.battle_spaces:
             if self.rect.collidepoint(space.rect.center) and not \
             space.occupied and space.theater.available and \
@@ -113,8 +115,13 @@ class Token:
                         for i in range(space.effect_value):
                             board.research(player_bag, research_bag)
                     if space.effect == 'res_industry':
-                        board.research_industry(player_hand, research_bag)
+                        board.research_industry(player_hand, research_bag, turn)
                 # try to make this a function and careful with variable names - probs in campaign
+                # print(space.effect)
+                # print(space.theater.theater)
+                # print(space.campaign.campaign)
+                # print(space.effect_value)
+                played_space = space
                 camp = space.campaign.spaces
                 occupied_list = []
                 for item in camp:
@@ -138,18 +145,32 @@ class Token:
                 else:
                     print('campaign spaces available')
 
+                # closing theater               
                 # played_theater = space.theater
+                # available_list = []
+                if abs(space.theater.theater_score) >= 14:
+                    if space.theater.available:
+                        for campaign in space.theater.campaigns:
+                            for space in campaign.spaces:
+                                if not space.occupied and space.effect != 'blank':
+                                    available_list.append(space)
+                        space.theater.available = False
+                        print('theater close tokens')
                 # space_value = space.effect_value
 
                 break
+                # print(space.effect)
+                # print(space.theater.theater)
+                # print(space.campaign.campaign)
+                # print(space.effect_value)
         else:
             self.rect.x = self.original_x
             self.rect.y = self.original_y
-            space = None
+            played_space = None
 
         self.moving = False
 
-        return space
+        return played_space, available_list
 
 
 if __name__ == '__main__':

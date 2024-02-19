@@ -176,14 +176,14 @@ class Theater:
                             self.score_track_x += 20
                         elif self.theater_score <= 14:
                             self.score_track_y += 20
-                        if self.theater_score == 14:
-                            self.available = False # closes theathers
+                        # if self.theater_score == 14:
+                        #     self.available = False # closes theathers
                     elif self.theater in ('africa', 'asia'):
                         if self.theater_score <= -9:
                             self.score_track_y -= 20
                         elif self.theater_score <= 9:
                             self.score_track_x += 20
-                        elif self.theater_score <= 10:
+                        elif self.theater_score >= 10:
                             self.score_track_y += 20
                         if self.theater_score == 11:
                             self.available = False # closes theather
@@ -196,8 +196,8 @@ class Theater:
                             self.score_track_x -= 20
                         elif self.theater_score >= -14:
                             self.score_track_y += 20
-                        if self.theater_score == -14:
-                            self.available = False # closes theather
+                        # if self.theater_score == -14:
+                        #     self.available = False # closes theather
                     elif self.theater in ('africa', 'asia'):
                         if self.theater_score >= 9:
                             self.score_track_y -= 20    
@@ -208,7 +208,7 @@ class Theater:
                         if self.theater_score == -11:
                             self.available = False # closes theather
 
-        print(self.theater_score)
+        print('theater score:', self.theater_score)
 
     def move_track_marker_nuclear(self, theaters, turn):
         print(type(theaters))
@@ -263,6 +263,7 @@ class Theater:
                     print(k, v.theater_score)
     
     def move_track_marker_strategic(self, theaters, space_value, selected_theater, turn):
+        print('ran move track marker strategic')
         for k, v in theaters.items():   
             if k != self.theater and k == selected_theater:
                 for i in range(space_value):
@@ -429,17 +430,26 @@ class GameBoard:
         theater.move_track_marker(value, turn)
 
     def bombing(self, opponent_hand, opponent_bag):
-        opponent_bag.append(opponent_hand.hand_list.pop(random.randrange(0, len(opponent_hand.hand_list) - 1)))
+        opponent_bag.append(opponent_hand.hand_list.pop(random.randrange(0, len(opponent_hand.hand_list))))
         random.shuffle(opponent_bag)
+        print('ran bombing')
 
     def research(self, player_bag, research_bag):
         player_bag.append(research_bag.pop())
         random.shuffle(player_bag)
         random.shuffle(research_bag)
 
-    def research_industry(self, hand, research_bag):
-        hand.hand_list.append(research_bag.pop())
-        random.shuffle(research_bag)
+    def research_industry(self, hand, research_bag, turn):
+        hand.hand_list.append(research_bag.pop())  
+        if turn == 'axis':
+            y = 840          
+        elif turn == 'allied':
+            y = 770
+        for i, token in enumerate((hand.hand_list)):
+            x = 50 + i * 60
+            token.token_starting_location(x, y) 
+        random.shuffle(research_bag) 
+        print('rand res ind')
 
     def campaign_victory_points(self, campaign, theater):
         if theater.theater_score == 0:
