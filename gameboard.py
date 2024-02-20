@@ -336,6 +336,7 @@ class GameBoard:
         self.battle_spaces = self.create_battle_spaces()
         self.theater_buttons = self.create_theater_buttons()
         self.placed_tokens = []
+        self.played_spaces = []
         self.axis_victory_points = 0
         self.axis_symbol = pygame.image.load(os.path.join('images', 'axis_symbol.jpg'))
         self.axis_symbol_rect = self.axis_symbol.get_rect()

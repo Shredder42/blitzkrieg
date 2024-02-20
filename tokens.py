@@ -156,13 +156,17 @@ class Token:
                                     available_list.append(space)
                                 # new campaign points below
                                     # this one should just give the campaing points if there is nothing to click on
-                                else:
+                                elif not space.occupied and (space.effect == 'blank' or space.effect != 'tactical'):
                                     space.occupied = True
-                                    occupied_list = [] #this isn't in correct spot
+                                    print('remaining theater space:', space.effect)
+                                    print('remaining theater space:', space.effect_value)
+                                    print('remaining theater space:', space.campaign.campaign)
+                                    print('remaining theater space occupied:', space.occupied)
+                                    occupied_list = [] # this will automaticall give victory pts if only spaces remaining in campaign are blank or tactical
                                     for item in space.campaign.spaces:
                                         occupied_list.append(item.occupied)
                                     if all(occupied_list):
-                                        # print('All campaign spaces full')
+                                    #     # print('All campaign spaces full')
                                         # space.campaign.available = False
                                         board.campaign_victory_points(space.campaign, space.theater)
                         space.theater.available = False

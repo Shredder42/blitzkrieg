@@ -23,8 +23,7 @@ clock = pygame.time.Clock()
 closing theaters
     copy to allies
     points for campaigns closed in closed theathers
-score tracker is off on africa and asia on the axis wining side - doesn't move up from 10 to 11 when place token
-
+    if tactical is last selected it doesn't let you choose another theater first
 blitz has to be in same theater 
 
 use the side token attribute in conjunction with turns to determine who can play token and where scores go
@@ -181,7 +180,7 @@ def main():
     run = True
     # moving = False
     played_space = None
-    turn = 'allied' # this will need to be changed to axis eventually
+    turn = 'axis'
     blitz = False
     task_force = False
     closed_theater = False
