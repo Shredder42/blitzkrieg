@@ -16,18 +16,18 @@ pygame.display.set_caption('Blitzkrieg!')
 
 board = pygame.image.load(os.path.join('images', 'blitzkrieg_game_board_italian.jpg'))
 board = pygame.transform.scale_by(board, 2)
-surface = pygame.Surface((1060, 900), pygame.SRCALPHA) # need for creating transparent rect
+surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need for creating transparent rect
 clock = pygame.time.Clock()
 
 '''
 closing theaters
     copy to allies
-    points for campaigns closed in closed theathers
-blitz has to be in same theater 
+blitz has to be in same theater - coded but check a little more
+render instructions on screen
 
 
 nuclear bomb moved back axis score on theater with all tiles placed - will close the theater when tiles
-    placed or score reaches end
+    placed or score reaches end - amke sure it doesn't move it theater closed
 figure out playing over internet? - start with pass and play for now
 '''
 
@@ -194,8 +194,9 @@ def main():
         game_board.draw_symbols(screen)
         for theater in theaters:
             theaters[theater].draw_track_marker(screen)
-        for token in game_board.placed_tokens:
-            token.draw(screen)
+        if len(game_board.placed_tokens) > 1:
+            for token in game_board.placed_tokens[1:]:
+                token.draw(screen)
         # allied_1.draw(screen)
         # allied_2.draw(screen)
         # allied_3.draw(screen)

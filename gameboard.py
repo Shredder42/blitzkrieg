@@ -1,6 +1,7 @@
 import os
 import pygame
 import random
+from tokens import Token
 '''
 types of battle spaces are:
     - industrial production (production)
@@ -335,8 +336,8 @@ class GameBoard:
         self.campaigns = campaigns
         self.battle_spaces = self.create_battle_spaces()
         self.theater_buttons = self.create_theater_buttons()
-        self.placed_tokens = []
-        self.played_spaces = []
+        self.placed_tokens = [Token(None, None, None, 'stratagem_big_guns.png')]
+        self.played_spaces = [BattleSpace(-50, -50, None, None, None, None, None)]
         self.axis_victory_points = 0
         self.axis_symbol = pygame.image.load(os.path.join('images', 'axis_symbol.jpg'))
         self.axis_symbol_rect = self.axis_symbol.get_rect()

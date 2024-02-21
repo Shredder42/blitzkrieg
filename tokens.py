@@ -66,17 +66,29 @@ class Token:
         closed_theater = False
         played_space = None
         for space in board.battle_spaces:
-            if self.rect.collidepoint(space.rect.center) and not \
-            space.occupied and space.theater.available and \
+            # this is the working logic
+            # if self.rect.collidepoint(space.rect.center) and not \
+            # space.occupied and space.theater.available and \
+            # ((space.campaign.available and self.match_type_and_unit(space)) or \
+            # self.effect == 'scientist'):
+            if (self.rect.collidepoint(space.rect.center) and not board.placed_tokens[-1].effect == 'blitz' and not \
+            space.occupied and space.theater.available  and \
             ((space.campaign.available and self.match_type_and_unit(space)) or \
-            self.effect == 'scientist'):
+            self.effect == 'scientist')) or \
+            (self.rect.collidepoint(space.rect.center) and board.placed_tokens[-1].effect == 'blitz' and not \
+            space.occupied and space.theater.available and space.theater == board.played_spaces[-1].theater and \
+            ((space.campaign.available and self.match_type_and_unit(space)) or \
+            self.effect == 'scientist')):
                 self.rect.center = space.rect.center
                 space.occupied = True
                 space.occupied_by = self
                 player_hand.hand_list.remove(self)
                 # hand.draw_new_token() # will need to move this to end of turn, not token placement
                 self.placed = True
+                board.played_spaces.append(space)
+                print('played spaces:', board.played_spaces)
                 board.placed_tokens.append(self)
+                print('placed tokens', board.placed_tokens)
                 space.theater.adjust_unit_count(self, turn)
                 space.theater.move_track_marker(self.value, turn)
                 # token effects
