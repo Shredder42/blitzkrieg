@@ -63,6 +63,7 @@ class Token:
 
     def place_token(self, board, player_hand, opponent_hand, research_bag, player_bag, opponent_bag, theaters, turn):
         available_list = []
+        closed_theater = False
         played_space = None
         for space in board.battle_spaces:
             if self.rect.collidepoint(space.rect.center) and not \
@@ -149,13 +150,13 @@ class Token:
                 # played_theater = space.theater
                 # available_list = []
                 if (abs(space.theater.theater_score) >= 14 and space.theater.theater in ('west_europe', 'pacific', 'east_europe')):
+                    closed_theater = True
                     if space.theater.available:
                         for campaign in space.theater.campaigns:
                             for space in campaign.spaces:
                                 if not space.occupied and space.effect != 'blank' and space.effect != 'tactical':
                                     available_list.append(space)
-                                # new campaign points below
-                                    # this one should just give the campaing points if there is nothing to click on
+                                # this will automatically give victory pts if only spaces remaining in campaign are blank or tactical
                                 elif not space.occupied and (space.effect == 'blank' or space.effect != 'tactical'):
                                     space.occupied = True
                                     print('remaining theater space:', space.effect)
@@ -168,17 +169,33 @@ class Token:
                                     if all(occupied_list):
                                     #     # print('All campaign spaces full')
                                         # space.campaign.available = False
-                                        board.campaign_victory_points(space.campaign, space.theater)
+                                        for i in range(space.campaign.victory_points):
+                                            board.propaganda(turn)
                         space.theater.available = False
                         print('theater close tokens')
                 # space_value = space.effect_value
                 elif (abs(space.theater.theater_score) >= 11 and space.theater.theater in ('africa', 'asia')):
+                    closed_theater = True
                     print('CLOSED AFRICA OR ASIA!!!')
                     if space.theater.available:
                         for campaign in space.theater.campaigns:
                             for space in campaign.spaces:
                                 if not space.occupied and space.effect != 'blank' and space.effect != 'tactical':
                                     available_list.append(space)
+                                elif not space.occupied and (space.effect == 'blank' or space.effect != 'tactical'):
+                                    space.occupied = True
+                                    print('remaining theater space:', space.effect)
+                                    print('remaining theater space:', space.effect_value)
+                                    print('remaining theater space:', space.campaign.campaign)
+                                    print('remaining theater space occupied:', space.occupied)
+                                    occupied_list = [] # this will automaticall give victory pts if only spaces remaining in campaign are blank or tactical
+                                    for item in space.campaign.spaces:
+                                        occupied_list.append(item.occupied)
+                                    if all(occupied_list):
+                                    #     # print('All campaign spaces full')
+                                        # space.campaign.available = False
+                                        for i in range(space.campaign.victory_points):
+                                            board.propaganda(turn)
                         space.theater.available = False
 
                 break
@@ -193,7 +210,7 @@ class Token:
 
         self.moving = False
 
-        return played_space, available_list
+        return played_space, closed_theater, available_list
 
 
 if __name__ == '__main__':
