@@ -336,6 +336,7 @@ class GameBoard:
         self.campaigns = campaigns
         self.battle_spaces = self.create_battle_spaces()
         self.theater_buttons = self.create_theater_buttons()
+        # these two are place holders for before the first turn
         self.placed_tokens = [Token(None, None, None, 'stratagem_big_guns.png')]
         self.played_spaces = [BattleSpace(-50, -50, None, None, None, None, None)]
         self.axis_victory_points = 0

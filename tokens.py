@@ -86,9 +86,9 @@ class Token:
                 # hand.draw_new_token() # will need to move this to end of turn, not token placement
                 self.placed = True
                 board.played_spaces.append(space)
-                print('played spaces:', board.played_spaces)
+                # print('played spaces:', board.played_spaces)
                 board.placed_tokens.append(self)
-                print('placed tokens', board.placed_tokens)
+                # print('placed tokens', board.placed_tokens)
                 space.theater.adjust_unit_count(self, turn)
                 space.theater.move_track_marker(self.value, turn)
                 # token effects
@@ -171,10 +171,10 @@ class Token:
                                 # this will automatically give victory pts if only spaces remaining in campaign are blank or tactical
                                 elif not space.occupied and (space.effect == 'blank' or space.effect != 'tactical'):
                                     space.occupied = True
-                                    print('remaining theater space:', space.effect)
-                                    print('remaining theater space:', space.effect_value)
-                                    print('remaining theater space:', space.campaign.campaign)
-                                    print('remaining theater space occupied:', space.occupied)
+                                    # print('remaining theater space:', space.effect)
+                                    # print('remaining theater space:', space.effect_value)
+                                    # print('remaining theater space:', space.campaign.campaign)
+                                    # print('remaining theater space occupied:', space.occupied)
                                     occupied_list = [] # this will automaticall give victory pts if only spaces remaining in campaign are blank or tactical
                                     for item in space.campaign.spaces:
                                         occupied_list.append(item.occupied)
@@ -184,11 +184,11 @@ class Token:
                                         for i in range(space.campaign.victory_points):
                                             board.propaganda(turn)
                         space.theater.available = False
-                        print('theater close tokens')
+                        # print('theater close tokens')
                 # space_value = space.effect_value
                 elif (abs(space.theater.theater_score) >= 11 and space.theater.theater in ('africa', 'asia')):
                     closed_theater = True
-                    print('CLOSED AFRICA OR ASIA!!!')
+                    # print('CLOSED AFRICA OR ASIA!!!')
                     if space.theater.available:
                         for campaign in space.theater.campaigns:
                             for space in campaign.spaces:
