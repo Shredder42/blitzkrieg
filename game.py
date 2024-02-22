@@ -13,7 +13,7 @@ ESPRESSO = (75, 56, 42) # table top color
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Blitzkrieg!')
-
+font = pygame.font.SysFont('times new roman', 20)
 board = pygame.image.load(os.path.join('images', 'blitzkrieg_game_board_italian.jpg'))
 board = pygame.transform.scale_by(board, 2)
 surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need for creating transparent rect
@@ -176,6 +176,7 @@ def main():
     # moving = False
     played_space = None
     turn = 'axis'
+    print(f'{turn.title()} commander\'s turn')
     blitz = False
     task_force = False
     closed_theater = False
@@ -194,6 +195,11 @@ def main():
         if len(game_board.placed_tokens) > 1:
             for token in game_board.placed_tokens[1:]:
                 token.draw(screen)
+        turn_text = font.render(f'{turn.title()} Commander deploy a unit...', True, 'white')
+        turn_text_rect = turn_text.get_rect()
+        turn_text_rect.x = 10
+        turn_text_rect.y = 770
+        screen.blit(turn_text, turn_text_rect)
         # allied_1.draw(screen)
         # allied_2.draw(screen)
         # allied_3.draw(screen)
@@ -212,7 +218,7 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                # print(pos)
+                print(pos)
 
                 if turn == 'allied':
                     for token in allied_hand.hand_list:

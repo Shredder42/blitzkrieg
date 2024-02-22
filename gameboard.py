@@ -437,6 +437,7 @@ class GameBoard:
         opponent_bag.append(opponent_hand.hand_list.pop(random.randrange(0, len(opponent_hand.hand_list))))
         random.shuffle(opponent_bag)
         print('Bombed an opponent\'s unit!')
+        
 
     def research(self, player_bag, research_bag):
         player_bag.append(research_bag.pop())
@@ -450,9 +451,9 @@ class GameBoard:
         #     y = 840          
         # elif turn == 'allied':
         #     y = 770
-        y = 770
+        y = 800
         for i, token in enumerate((hand.hand_list)):
-            x = 50 + i * 60
+            x = 25 + i * 60
             token.token_starting_location(x, y) 
         random.shuffle(research_bag) 
         print('New special unit available!')

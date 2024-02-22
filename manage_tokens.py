@@ -100,9 +100,9 @@ class PlayerHand:
         #     y = 770
         # elif self.side == 'axis':
         #     y = 840
-        y = 770
+        y = 800
         for i in range(3):
-            x = 50 + i * 60
+            x = 25 + i * 60
             current_token = self.bag.pop()
             current_token.token_starting_location(x, y) 
             hand_list.append(current_token)
@@ -115,9 +115,9 @@ class PlayerHand:
         #     y = 770
         # elif self.side == 'axis':
         #     y = 840
-        y = 770
+        y = 800
         for i, token in enumerate((self.hand_list)):
-            x = 50 + i * 60
+            x = 25 + i * 60
             token.token_starting_location(x, y) 
 
 
