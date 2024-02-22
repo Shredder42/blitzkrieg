@@ -20,12 +20,8 @@ surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need 
 clock = pygame.time.Clock()
 
 '''
-closing theaters
-    copy to allies
-blitz has to be in same theater - coded but check a little more
-render instructions on screen
-add pauses for time to read between moves
-only display tiles for one side at a time
+render instructions/results on screen
+add pauses for time to read between moves and end game
 
 
 nuclear bomb moved back axis score on theater with all tiles placed - will close the theater when tiles
@@ -92,11 +88,16 @@ axis_hand = PlayerHand(bags.axis_token_bag, 'axis')
 #     print(token.special)
     
 def end_turn(turn, played_space, game_board, axis_hand, allied_hand, run):
-    if turn == 'allied':
+    if turn == 'axis':
+        game_board.industrial_production(axis_hand)
+        if check_for_victory_availabilty(game_board, allied_hand.hand_list):
+            turn = 'allied'
+        else:
+            print('Axis forces win the war. Allied commander out of options')
+            run = False
+    elif turn == 'allied':
         # check for winning on points
         winner = check_for_victory_points(game_board)
-        # if game_board.axis_victory_points >= 25 or game_board.allied_victory_points >= 25:
-        #     if game_board.axis_victory_points > game_board.allied_victory_points:
         if winner == 'axis':
             print(f'Axis forces win the war: {game_board.axis_victory_points} - {game_board.allied_victory_points}')
             run = False
@@ -110,16 +111,10 @@ def end_turn(turn, played_space, game_board, axis_hand, allied_hand, run):
             else:
                 print('Allied forces win the war. Axis commander out of options')
                 run = False
-    elif turn == 'axis':
-        game_board.industrial_production(axis_hand)
-        if check_for_victory_availabilty(game_board, allied_hand.hand_list):
-            turn = 'allied'
-        else:
-            print('Axis forces win the war. Allied commander out of options')
-            run = False
+
 
     played_space = None
-    print('Turn:', turn)
+    print(f'{turn.title()} commander\'s turn')
     return turn, played_space, run
 
 def check_for_victory_points(game_board):
@@ -147,8 +142,8 @@ def check_for_victory_availabilty(game_board, hand):
         # print(space.theater.theater)
         # print(space.effect)
     for token in hand:
-        print(token.unit)
-        print(token.value)
+        # print(token.unit)
+        # print(token.value)
         if token.effect == 'scientist':
             for theater in game_board.theaters.values():
                 if theater.available:
@@ -169,7 +164,7 @@ def check_for_victory_availabilty(game_board, hand):
     # if not hand.hand_list:
     #     available_move = False
         
-    print(available_move)
+    # print(available_move)
 
     return available_move
 
@@ -203,10 +198,13 @@ def main():
         # allied_2.draw(screen)
         # allied_3.draw(screen)
         # allied_4.draw(screen)
-        for token in allied_hand.hand_list:
-            token.draw(screen)
-        for token in axis_hand.hand_list:
-            token.draw(screen)
+        if turn == 'axis':
+            for token in axis_hand.hand_list:
+                token.draw(screen)
+        else:
+            for token in allied_hand.hand_list:
+                token.draw(screen)
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -214,7 +212,7 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                print(pos)
+                # print(pos)
 
                 if turn == 'allied':
                     for token in allied_hand.hand_list:
@@ -250,8 +248,8 @@ def main():
                             #     closed_theater = True
                             # else:
                             #     closed_theater = False
-                            print('closed theater', closed_theater)
-                            print(available_list)
+                            # print('closed theater', closed_theater)
+                            # print(available_list)
                             # if played_space:
                             #     print(played_space.effect)
                             #     print(played_space.theater.theater)
@@ -293,7 +291,7 @@ def main():
                         # print(played_space.effect_value)
                         if played_space:
                             if played_space.effect == 'strategic': 
-                                print(played_space.effect)                           
+                                # print(played_space.effect)                           
                                 for button in game_board.theater_buttons:
                                     if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
                                         played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
@@ -301,7 +299,7 @@ def main():
                                         break
                                 else:
                                     print('pick a theater')
-                        print('theater closed - select all other battle spaces')
+                        print('Theater closed - select all other battle spaces (except blank or strategic advantage)')
                         # clickable_spaces = len(available_list)
                         # count = 0
                         # for i in range()
@@ -339,7 +337,7 @@ def main():
                                     available_list.remove(battle_space)
                                     battle_space.occupied = True
                                 if battle_space.effect == 'res_industry':
-                                    print('clicked on res ind')
+                                    # print('clicked on res ind')
                                     game_board.research_industry(axis_hand, bags.research_bag, turn)
                                     available_list.remove(battle_space)
                                     battle_space.occupied = True
@@ -434,7 +432,7 @@ def main():
                                         break                               
                                 else:
                                     print('pick a theater')
-                        print('theater closed - select all other battle spaces')              
+                        print('Theater closed - select all other battle spaces (except blank or strategic advantage)')              
                         for battle_space in available_list:
                             if battle_space.rect.collidepoint(pos) and not strategic:
                                 if battle_space.effect == 'propaganda':
@@ -468,7 +466,7 @@ def main():
                                     available_list.remove(battle_space)
                                     battle_space.occupied = True
                                 if battle_space.effect == 'res_industry':
-                                    print('clicked on res ind')
+                                    # print('clicked on res ind')
                                     game_board.research_industry(allied_hand, bags.research_bag, turn)
                                     available_list.remove(battle_space)
                                     battle_space.occupied = True
@@ -483,9 +481,9 @@ def main():
                                 if all(occupied_list):
                                     for i in range(battle_space.campaign.victory_points):
                                         game_board.propaganda(turn)
-                                        print(battle_space.campaign.campaign)
-                                        print(occupied_list)
-                                        print('ran propaganda')
+                                        # print(battle_space.campaign.campaign)
+                                        # print(occupied_list)
+                                        # print('ran propaganda')
                                 # if battle_space.occupied:
                                 #     available_list.remove(battle_space)
                         if strategic: # think about how to get this into the above loop

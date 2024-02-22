@@ -96,11 +96,12 @@ class PlayerHand:
 
     def draw_starting_hand(self):
         hand_list = []
-        if self.side == 'allied':
-            y = 770
-        elif self.side == 'axis':
-            y = 840
-        for i in range(15):
+        # if self.side == 'allied':
+        #     y = 770
+        # elif self.side == 'axis':
+        #     y = 840
+        y = 770
+        for i in range(3):
             x = 50 + i * 60
             current_token = self.bag.pop()
             current_token.token_starting_location(x, y) 
@@ -110,10 +111,11 @@ class PlayerHand:
     
     def draw_new_token(self):
         self.hand_list.append(self.bag.pop())
-        if self.side == 'allied':
-            y = 770
-        elif self.side == 'axis':
-            y = 840
+        # if self.side == 'allied':
+        #     y = 770
+        # elif self.side == 'axis':
+        #     y = 840
+        y = 770
         for i, token in enumerate((self.hand_list)):
             x = 50 + i * 60
             token.token_starting_location(x, y) 

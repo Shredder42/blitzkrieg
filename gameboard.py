@@ -428,6 +428,7 @@ class GameBoard:
 
     def industrial_production(self, hand):
         hand.draw_new_token()
+        print('New unit avilable!')
 
     def tactical_advantage(self, theater, value, turn):
         theater.move_track_marker(value, turn)
@@ -435,24 +436,26 @@ class GameBoard:
     def bombing(self, opponent_hand, opponent_bag):
         opponent_bag.append(opponent_hand.hand_list.pop(random.randrange(0, len(opponent_hand.hand_list))))
         random.shuffle(opponent_bag)
-        print('ran bombing')
+        print('Bombed an opponent\'s unit!')
 
     def research(self, player_bag, research_bag):
         player_bag.append(research_bag.pop())
         random.shuffle(player_bag)
         random.shuffle(research_bag)
+        print('Researched special unit!')
 
     def research_industry(self, hand, research_bag, turn):
         hand.hand_list.append(research_bag.pop())  
-        if turn == 'axis':
-            y = 840          
-        elif turn == 'allied':
-            y = 770
+        # if turn == 'axis':
+        #     y = 840          
+        # elif turn == 'allied':
+        #     y = 770
+        y = 770
         for i, token in enumerate((hand.hand_list)):
             x = 50 + i * 60
             token.token_starting_location(x, y) 
         random.shuffle(research_bag) 
-        print('rand res ind')
+        print('New special unit available!')
 
     def campaign_victory_points(self, campaign, theater):
         if theater.theater_score == 0:

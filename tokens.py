@@ -37,16 +37,17 @@ class Token:
     def clicked_token(self, pos, board):
         if self.rect.collidepoint(pos):
             if not self.placed:
-                print('clicked on token')
+                # print('clicked on token')
                 self.moving = True
             if self.effect == 'spy':
                 last_token = board.placed_tokens[-1]
                 self.unit = last_token.unit
-                print(last_token.unit)
                 self.value = last_token.value
-                print(last_token.value)
                 self.effect = last_token.effect
-                print(last_token.effect)
+                print('Prepare to deploy the spy!')
+                print('Spy unit type:', last_token.unit)
+                print('Spy value:', last_token.value)
+                print('Spy effect:', last_token.effect)
 
     def move_token(self, event):
         if self.moving:
@@ -140,7 +141,7 @@ class Token:
                 for item in camp:
                     occupied_list.append(item.occupied)
                 if all(occupied_list):
-                    print('All campaign spaces full')
+                    # print('All campaign spaces full')
                     space.campaign.available = False
                     board.campaign_victory_points(space.campaign, space.theater)
                     # for i in range(space.campaign.victory_points):
@@ -155,8 +156,8 @@ class Token:
                     except IndexError:
                         space.theater.available = False
                         # print(space.theater.available)
-                else:
-                    print('campaign spaces available')
+                # else:
+                    # print('campaign spaces available')
 
                 # closing theater               
                 # played_theater = space.theater
@@ -196,10 +197,10 @@ class Token:
                                     available_list.append(space)
                                 elif not space.occupied and (space.effect == 'blank' or space.effect != 'tactical'):
                                     space.occupied = True
-                                    print('remaining theater space:', space.effect)
-                                    print('remaining theater space:', space.effect_value)
-                                    print('remaining theater space:', space.campaign.campaign)
-                                    print('remaining theater space occupied:', space.occupied)
+                                    # print('remaining theater space:', space.effect)
+                                    # print('remaining theater space:', space.effect_value)
+                                    # print('remaining theater space:', space.campaign.campaign)
+                                    # print('remaining theater space occupied:', space.occupied)
                                     occupied_list = [] # this will automaticall give victory pts if only spaces remaining in campaign are blank or tactical
                                     for item in space.campaign.spaces:
                                         occupied_list.append(item.occupied)
