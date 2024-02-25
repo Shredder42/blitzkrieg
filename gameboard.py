@@ -212,11 +212,11 @@ class Theater:
         print('theater score:', self.theater_score)
 
     def move_track_marker_nuclear(self, theaters, turn):
-        print(type(theaters))
+        # print(type(theaters))
         for i in range(2):
             if turn == 'axis':
                 for k, v in theaters.items():                
-                    if k != self.theater:
+                    if k != self.theater and v.available:
                         if k in ('west_europe', 'pacific', 'east_europe'):
                             if v.theater_score >= -12 and v.theater_score <= 13:
                                 v.theater_score -= 1
@@ -227,7 +227,7 @@ class Theater:
                                 elif v.theater_score <= 12:
                                     v.score_track_y -= 20
                             
-                        if k in ('africa', 'asia'):
+                        elif k in ('africa', 'asia'):
                             if v.theater_score >= -9 and v.theater_score <= 10:
                                 v.theater_score -= 1
                                 if v.theater_score == -10:
@@ -241,7 +241,7 @@ class Theater:
 
             elif turn == 'allied':
                 for k, v in theaters.items():                
-                    if k != self.theater:
+                    if k != self.theater and v.available:
                         if k in ('west_europe', 'pacific', 'east_europe'):
                             if v.theater_score >= -13 and v.theater_score <= 12:
                                 v.theater_score += 1
@@ -252,7 +252,7 @@ class Theater:
                                 elif v.theater_score >= -12:
                                     v.score_track_y -= 20
 
-                        if k in ('africa', 'asia'):
+                        elif k in ('africa', 'asia'):
                             if v.theater_score >= -10 and v.theater_score <= 9:
                                 v.theater_score += 1
                                 if v.theater_score == 10:
@@ -264,9 +264,9 @@ class Theater:
                     print(k, v.theater_score)
     
     def move_track_marker_strategic(self, theaters, space_value, selected_theater, turn):
-        print('ran move track marker strategic')
+        # print('ran move track marker strategic')
         for k, v in theaters.items():   
-            if k != self.theater and k == selected_theater:
+            if k != self.theater and k == selected_theater and v.available:
                 for i in range(space_value):
                     if turn == 'axis':
                         if k in ('west_europe', 'pacific', 'east_europe'):
