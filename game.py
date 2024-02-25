@@ -22,12 +22,16 @@ surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need 
 clock = pygame.time.Clock()
 
 '''
+pause for end of game - THIS IS BIG THING REMAINING TO FIGURE OUT
+A little more text on screen for what to do - closed theater (any more?)
+
 can play tokens instead of finishing out the theater when closed by track points 
     check this again - maybe fixed - pay attention to it
 strategic when clicked on closed theater it went to next turn - only do end_turn if clicked theater is valid
-end turn if no tokens in hand
-pause for end of game - this didn't work correctly
+    - think this is fixed but pay attention
+end turn if no tokens in hand - think fixed but pay attention
 figure out playing over internet? - start with pass and play for now
+clean up code? functionalize things?
 '''
 
 theaters = {
@@ -325,7 +329,7 @@ def main():
                         if played_space.effect == 'strategic': 
                             strategic = True                           
                             for button in game_board.theater_buttons:
-                                if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
+                                if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater and theaters[button.theater].available:
                                     played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     played_space = None
                                     strategic = False
@@ -366,7 +370,7 @@ def main():
                                 # print(played_space.effect)     
                                 strategic = True                      
                                 for button in game_board.theater_buttons:
-                                    if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
+                                    if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater and theaters[button.theater].available:
                                         played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                         played_space = None   
                                         strategic = False                               
@@ -434,7 +438,7 @@ def main():
                         if strategic: # think about how to get this into the above loop
                             # may have to reorder the loop - maybe put the collide point within each space
                             for button in game_board.theater_buttons: 
-                                if button.rect.collidepoint(pos) and (button.theater != battle_space.theater.theater) and strategic:
+                                if button.rect.collidepoint(pos) and (button.theater != battle_space.theater.theater and theaters[button.theater].available) and strategic:
                                     # print(battle_space.theater.theater)
                                     # print(battle_space.effect_value)
                                     battle_space.theater.move_track_marker_strategic(theaters, battle_space.effect_value, button.theater, turn)
@@ -461,6 +465,7 @@ def main():
                                 game_board.propaganda(turn)
                             turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)                        
                     
+                    # ends turn if hand is empty
                     if not closed_theater and not strategic and not axis_hand.hand_list:
                         turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
 
@@ -483,7 +488,7 @@ def main():
                         if played_space.effect == 'strategic':
                             strategic = True
                             for button in game_board.theater_buttons:
-                                if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
+                                if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater and theaters[button.theater].available:
                                     played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     played_space = None
                                     strategic = False
@@ -507,7 +512,7 @@ def main():
                             if played_space.effect == 'strategic':
                                 strategic = True
                                 for button in game_board.theater_buttons:
-                                    if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater:
+                                    if button.rect.collidepoint(pos) and button.theater != played_space.theater.theater and theaters[button.theater].available:
                                         played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                         played_space = None 
                                         strategic = False                                                       
@@ -571,7 +576,7 @@ def main():
                         if strategic: # think about how to get this into the above loop
                             # may have to reorder the loop - maybe put the collide point within each space
                             for button in game_board.theater_buttons: 
-                                if button.rect.collidepoint(pos) and (button.theater != battle_space.theater.theater) and strategic:
+                                if button.rect.collidepoint(pos) and (button.theater != battle_space.theater.theater and theaters[button.theater].available) and strategic:
                                     # print(battle_space.theater.theater)
                                     # print(battle_space.effect_value)
                                     battle_space.theater.move_track_marker_strategic(theaters, battle_space.effect_value, button.theater, turn)
@@ -598,6 +603,11 @@ def main():
                             for i in range(2):
                                 game_board.propaganda(turn)
                             turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
+
+                    # ends turn if hand is empty
+                    if not closed_theater and not strategic and not axis_hand.hand_list:
+                        turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
+
 
 
         if result == 'axis: options':
