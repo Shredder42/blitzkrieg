@@ -22,7 +22,8 @@ surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need 
 clock = pygame.time.Clock()
 
 '''
-can play tokens instead of finishing out the theater when closed by track points
+can play tokens instead of finishing out the theater when closed by track points 
+    check this again
 pause for end of game - check on this
 figure out playing over internet? - start with pass and play for now
 '''
@@ -269,7 +270,7 @@ def main():
                 pos = pygame.mouse.get_pos()
                 print(pos)
 
-                if not between_turns:
+                if not between_turns and not closed_theater:
                     if turn == 'allied':
                         for token in allied_hand.hand_list:
                             token.clicked_token(pos, game_board)
@@ -278,7 +279,7 @@ def main():
                             token.clicked_token(pos, game_board)        
             
             elif event.type == pygame.MOUSEMOTION:
-                if not between_turns:
+                if not between_turns and not closed_theater:
                     if turn == 'allied':
                         for token in allied_hand.hand_list:
                             token.move_token(event)
@@ -292,11 +293,11 @@ def main():
                 if begin_turn_button.rect.collidepoint(pos) and between_turns:
                     between_turns = False
 
-                elif turn == 'axis' and not between_turns:
+                elif turn == 'axis' and not between_turns: 
                     for token in axis_hand.hand_list:
                         if token.moving:
                             played_space, closed_theater, available_list = token.place_token(game_board, axis_hand, allied_hand, bags.research_bag, bags.axis_token_bag, bags.allied_token_bag, theaters, turn)
-                            if game_board.placed_tokens[-1].effect == 'blitz':
+                            if game_board.placed_tokens[-1].effect == 'blitz' and not closed_theater:
                                 blitz = True
                             else:
                                 blitz = False
@@ -453,6 +454,7 @@ def main():
                         #     board.campaign_victory_points(space.campaign, space.theater)
 
                         if not available_list and not strategic:
+                            closed_theater = False
                             for i in range(2):
                                 game_board.propaganda(turn)
                             turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)                        
@@ -461,7 +463,7 @@ def main():
                     for token in allied_hand.hand_list:
                         if token.moving:
                             played_space, closed_theater, available_list = token.place_token(game_board, allied_hand, axis_hand, bags.research_bag, bags.allied_token_bag, bags.axis_token_bag, theaters, turn)
-                            if game_board.placed_tokens[-1].effect == 'blitz':
+                            if game_board.placed_tokens[-1].effect == 'blitz' and not closed_theater:
                                 blitz = True
                             else:
                                 blitz = False
@@ -587,6 +589,7 @@ def main():
 
                         
                         if not available_list and not strategic:
+                            closed_theater = False
                             for i in range(2):
                                 game_board.propaganda(turn)
                             turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)

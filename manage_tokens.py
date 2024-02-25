@@ -101,7 +101,7 @@ class PlayerHand:
         # elif self.side == 'axis':
         #     y = 840
         y = 800
-        for i in range(3): #starting hand
+        for i in range(15): #starting hand
             x = 25 + i * 60
             current_token = self.bag.pop()
             current_token.token_starting_location(x, y) 
