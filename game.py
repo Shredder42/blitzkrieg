@@ -23,8 +23,10 @@ clock = pygame.time.Clock()
 
 '''
 can play tokens instead of finishing out the theater when closed by track points 
-    check this again
-pause for end of game - check on this
+    check this again - maybe fixed - pay attention to it
+strategic when clicked on closed theater it went to next turn - only do end_turn if clicked theater is valid
+end turn if no tokens in hand
+pause for end of game - this didn't work correctly
 figure out playing over internet? - start with pass and play for now
 '''
 
@@ -458,6 +460,9 @@ def main():
                             for i in range(2):
                                 game_board.propaganda(turn)
                             turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)                        
+                    
+                    if not closed_theater and not strategic and not axis_hand.hand_list:
+                        turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
 
                 elif turn == 'allied' and not between_turns:
                     for token in allied_hand.hand_list:
@@ -593,7 +598,6 @@ def main():
                             for i in range(2):
                                 game_board.propaganda(turn)
                             turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
-
 
 
         if result == 'axis: options':
