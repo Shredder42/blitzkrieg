@@ -1,8 +1,10 @@
 import os
+import time
 import pygame
 from gameboard import GameBoard, BattleSpace, Theater, Campaign
 from tokens import Token
 from manage_tokens import PlayerHand, TokenBags
+from button import Button
 
 pygame.init()
 pygame.font.init()
@@ -21,7 +23,8 @@ clock = pygame.time.Clock()
 
 '''
 render instructions/results on screen
-add pauses for time to read between moves and end game
+add button for between moves
+pause for end of game
 
 
 nuclear bomb moved back axis score on theater with all tiles placed - will close the theater when tiles
@@ -86,8 +89,9 @@ axis_hand = PlayerHand(bags.axis_token_bag, 'axis')
 # print(bags.axis_token_bag)
 # for token in bags.axis_token_bag:
 #     print(token.special)
+begin_turn_button = Button()
     
-def end_turn(turn, played_space, game_board, axis_hand, allied_hand, run):
+def end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font):
     if turn == 'axis':
         game_board.industrial_production(axis_hand)
         if check_for_victory_availabilty(game_board, allied_hand.hand_list):
@@ -111,11 +115,17 @@ def end_turn(turn, played_space, game_board, axis_hand, allied_hand, run):
             else:
                 print('Allied forces win the war. Axis commander out of options')
                 run = False
-
-
-    played_space = None
+    # This part needs some thought - remove screen & font from the function (and func calls) if end up not using
+    # text = font.render('Your orders have been carried out. Pass the computer.', True, 'white')
+    # text_rect = text.get_rect()
+    # text_rect.x = 10
+    # text_rect.y = 770
+    # screen.blit(text, text_rect)
+    # pygame.time.delay(3000) - this may need to be in a different place
+    # played_space = None
     print(f'{turn.title()} commander\'s turn')
-    return turn, played_space, run
+    between_turns = True
+    return turn, played_space, between_turns, run
 
 def check_for_victory_points(game_board):
     winner = None
@@ -176,6 +186,7 @@ def main():
     # moving = False
     played_space = None
     turn = 'axis'
+    between_turns = True
     print(f'{turn.title()} commander\'s turn')
     blitz = False
     task_force = False
@@ -195,21 +206,33 @@ def main():
         if len(game_board.placed_tokens) > 1:
             for token in game_board.placed_tokens[1:]:
                 token.draw(screen)
-        turn_text = font.render(f'{turn.title()} Commander deploy a unit...', True, 'white')
-        turn_text_rect = turn_text.get_rect()
-        turn_text_rect.x = 10
-        turn_text_rect.y = 770
-        screen.blit(turn_text, turn_text_rect)
+
+        # text = font.render('Your orders have been carried out. Pass the computer.', True, 'white')
+        # text_rect = text.get_rect()
+        # text_rect.x = 10
+        # text_rect.y = 770
+        # screen.blit(text, text_rect)
+        # pygame.time.delay(5000)
+        if between_turns:
+            begin_turn_button.draw(screen, turn)
+        else:
+            turn_text = font.render(f'{turn.title()} Commander, deploy a unit...', True, 'white')
+            turn_text_rect = turn_text.get_rect()
+            turn_text_rect.x = 10
+            turn_text_rect.y = 770
+            screen.blit(turn_text, turn_text_rect)
         # allied_1.draw(screen)
         # allied_2.draw(screen)
         # allied_3.draw(screen)
         # allied_4.draw(screen)
-        if turn == 'axis':
-            for token in axis_hand.hand_list:
-                token.draw(screen)
-        else:
-            for token in allied_hand.hand_list:
-                token.draw(screen)
+        # if not between_turns:
+            if turn == 'axis' :
+                for token in axis_hand.hand_list:
+                    token.draw(screen)
+            else:
+                screen.blit(turn_text, turn_text_rect)
+                for token in allied_hand.hand_list:
+                    token.draw(screen)
 
 
         for event in pygame.event.get():
@@ -220,25 +243,30 @@ def main():
                 pos = pygame.mouse.get_pos()
                 print(pos)
 
-                if turn == 'allied':
-                    for token in allied_hand.hand_list:
-                        token.clicked_token(pos, game_board)
-                elif turn == 'axis':
-                    for token in axis_hand.hand_list:
-                        token.clicked_token(pos, game_board)        
+                if not between_turns:
+                    if turn == 'allied':
+                        for token in allied_hand.hand_list:
+                            token.clicked_token(pos, game_board)
+                    elif turn == 'axis':
+                        for token in axis_hand.hand_list:
+                            token.clicked_token(pos, game_board)        
             
             elif event.type == pygame.MOUSEMOTION:
-                if turn == 'allied':
-                    for token in allied_hand.hand_list:
-                        token.move_token(event)
-                elif turn == 'axis':
-                    for token in axis_hand.hand_list:
-                        token.move_token(event)
+                if not between_turns:
+                    if turn == 'allied':
+                        for token in allied_hand.hand_list:
+                            token.move_token(event)
+                    elif turn == 'axis':
+                        for token in axis_hand.hand_list:
+                            token.move_token(event)
 
 
             elif event.type == pygame.MOUSEBUTTONUP:
 
-                if turn == 'axis':
+                if begin_turn_button.rect.collidepoint(pos) and between_turns:
+                    between_turns = False
+
+                elif turn == 'axis' and not between_turns:
                     for token in axis_hand.hand_list:
                         if token.moving:
                             played_space, closed_theater, available_list = token.place_token(game_board, axis_hand, allied_hand, bags.research_bag, bags.axis_token_bag, bags.allied_token_bag, theaters, turn)
@@ -271,7 +299,7 @@ def main():
                                     played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     # played_space = None
                                     if not blitz:
-                                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                                        turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
                                     elif blitz :
                                         print('place another token')                                       
                                     break
@@ -285,11 +313,18 @@ def main():
                                 # print(played_space.theater.theater)
                                 # print(played_space.campaign.campaign)
                                 # print(played_space.effect_value)
-                                turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                                # print('turn before end_turn:', turn)
+                                turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
+                                # print('turn after end_turn:', turn) # delay occurs before this prints
+                                # # seems like the delay occurs right after the logic statement in played_space
+                                # pygame.time.delay(3000) # not sure why this doesn't work - played_space & end_turn doesn't finish running before the delay
+                                # print('delay occurs')
+                                # print(turn)
+
                             elif blitz and not closed_theater:
                                 print('place another token')
                     elif played_space and not closed_theater:
-                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                        turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
                     if closed_theater:
                         # print(played_space.effect)
                         # print(played_space.theater.theater)
@@ -390,9 +425,9 @@ def main():
                         if not available_list and not strategic:
                             for i in range(2):
                                 game_board.propaganda(turn)
-                            turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)                        
+                            turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)                        
 
-                elif turn == 'allied':
+                elif turn == 'allied' and not between_turns:
                     for token in allied_hand.hand_list:
                         if token.moving:
                             played_space, closed_theater, available_list = token.place_token(game_board, allied_hand, axis_hand, bags.research_bag, bags.allied_token_bag, bags.axis_token_bag, theaters, turn)
@@ -414,7 +449,7 @@ def main():
                                     played_space.theater.move_track_marker_strategic(theaters, played_space.effect_value, button.theater, turn)
                                     # played_space = None
                                     if not blitz:
-                                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                                        turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
                                     else:
                                         print('place another token')
                                     break
@@ -423,11 +458,11 @@ def main():
                                 
                         else:
                             if not blitz and not closed_theater:
-                                turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                                turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
                             elif blitz and not closed_theater:
                                 print('place another token')
                     elif played_space and not closed_theater:
-                        turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                        turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
                     if closed_theater:
                         if played_space:
                             if played_space.effect == 'strategic':
@@ -520,7 +555,7 @@ def main():
                         if not available_list and not strategic:
                             for i in range(2):
                                 game_board.propaganda(turn)
-                            turn, played_space, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run)
+                            turn, played_space, between_turns, run = end_turn(turn, played_space, game_board, axis_hand, allied_hand, run, screen, font)
 
 
 

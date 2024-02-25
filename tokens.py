@@ -92,6 +92,7 @@ class Token:
                 # print('placed tokens', board.placed_tokens)
                 space.theater.adjust_unit_count(self, turn)
                 space.theater.move_track_marker(self.value, turn)
+                print('played token')
                 # token effects
                 # if self.effect == 'blitz':
                     # print('place another token') #implement this when handling turns
