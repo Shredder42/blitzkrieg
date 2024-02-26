@@ -1,5 +1,4 @@
 import os
-import time
 import pygame
 from gameboard import GameBoard, BattleSpace, Theater, Campaign
 from tokens import Token
@@ -22,7 +21,6 @@ surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need 
 clock = pygame.time.Clock()
 
 '''
-pause for end of game - THIS IS BIG THING REMAINING TO FIGURE OUT
 A little more text on screen for what to do - closed theater (any more?)
 
 can play tokens instead of finishing out the theater when closed by track points 
@@ -206,6 +204,7 @@ def main():
     closed_theater = False
     strategic = False
     result = None
+    result_displayed = False
     while run:
         screen.fill(ESPRESSO)
         screen.blit(board, (0,0))
@@ -220,6 +219,23 @@ def main():
         if len(game_board.placed_tokens) > 1:
             for token in game_board.placed_tokens[1:]:
                 token.draw(screen)
+        if result:
+            if result == 'axis: options':
+                axis_options_text = 'Axis forces win the war. Allied commander out of options.'
+                text_on_screen(axis_options_text, 10, 770)
+            elif result == 'axis: points':
+                axis_points_text = f'Axis forces win the war on victory points: {game_board.axis_victory_points} - {game_board.allied_victory_points}.'
+                text_on_screen(axis_points_text, 10, 770)
+            elif result == 'allied: options':
+                allied_options_text = 'Allied forces win the war. Axis commander out of options.'
+                text_on_screen(allied_options_text, 10, 770)
+            elif result == 'allied: points':
+                allied_options_text = f'Allied forces win the war on victory points: {game_board.allied_victory_points} - {game_board.axis_victory_points}.'
+                text_on_screen(allied_options_text, 10, 770)
+            result_displayed = True
+        # if result_displayed:
+        #     pygame.time.delay(3000)
+        #     run = False
 
         # text = font.render('Your orders have been carried out. Pass the computer.', True, 'white')
         # text_rect = text.get_rect()
@@ -254,7 +270,7 @@ def main():
         # strategic_text_rect.x = 650
         # strategic_text_rect.y = 770
         if strategic:
-            strategic_text = 'Played strategic advantage. Click on a theater'
+            strategic_text = 'Played strategic advantage. Click on a theater.'
             text_on_screen(strategic_text, 650, 770)
             
             # screen.blit(strategic_text, strategic_text_rect)
@@ -263,7 +279,7 @@ def main():
         # blitz_text_rect.x = 700
         # blitz_text_rect.y = 770
         if blitz and not strategic:
-            blitz_text = 'Blitzed the enemy. Play another token'
+            blitz_text = 'Blitzed the enemy. Play another token.'
             text_on_screen(blitz_text, 700, 770)
             # screen.blit(blitz_text, blitz_text_rect)
 
@@ -274,7 +290,7 @@ def main():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                print(pos)
+                # print(pos)
 
                 if not between_turns and not closed_theater:
                     if turn == 'allied':
@@ -610,43 +626,43 @@ def main():
 
 
 
-        if result == 'axis: options':
-            axis_options_text = 'Axis forces win the war. Allied commander out of options'
-            text_on_screen(axis_options_text, 10, 770)
-        elif result == 'axis: points':
-            axis_points_text = 'Axis forces win the war: {game_board.axis_victory_points} - {game_board.allied_victory_points}'
-            text_on_screen(axis_points_text, 10, 770)
-        elif result == 'allied: options':
-            allied_options_text = 'Allied forces win the war. Axis commander out of options'
-            text_on_screen(allied_options_text, 10, 770)
-        elif result == 'allied: points':
-            axis_options_text = 'Axis forces win the war: {game_board.allied_victory_points} - {game_board.axis_victory_points}'
-            text_on_screen(allied_options_text, 10, 770)
+        # if result == 'axis: options':
+        #     axis_options_text = 'Axis forces win the war. Allied commander out of options'
+        #     text_on_screen(axis_options_text, 10, 770)
+        # elif result == 'axis: points':
+        #     axis_points_text = 'Axis forces win the war: {game_board.axis_victory_points} - {game_board.allied_victory_points}'
+        #     text_on_screen(axis_points_text, 10, 770)
+        # elif result == 'allied: options':
+        #     allied_options_text = 'Allied forces win the war. Axis commander out of options'
+        #     text_on_screen(allied_options_text, 10, 770)
+        # elif result == 'allied: points':
+        #     axis_options_text = 'Axis forces win the war: {game_board.allied_victory_points} - {game_board.axis_victory_points}'
+        #     text_on_screen(allied_options_text, 10, 770)
 
 
         pygame.display.flip()
 
         clock.tick(60)
 
-        if result:
-            pygame.time.delay(60000)
+        if result_displayed:
+            pygame.time.delay(30000)
             run = False
 
-    for token in allied_hand.hand_list:
-        print(token.rect)
-    print('\n')
-    for token in axis_hand.hand_list:
-        print(f'{token.unit} value {token.value}')
-    print(len(axis_hand.hand_list))
+    # for token in allied_hand.hand_list:
+    #     print(token.rect)
+    # print('\n')
+    # for token in axis_hand.hand_list:
+    #     print(f'{token.unit} value {token.value}')
+    # print(len(axis_hand.hand_list))
     # print(bags.axis_token_bag)
     # print(played_space.effect)
     # for token in bags.axis_token_bag:
     #     print(token.special)
     print('axis victory points:', game_board.axis_victory_points)
     print('allied victory points:', game_board.allied_victory_points)
-    for v in theaters.values():
-        print(f'{v.theater} is available {v.available}')
-    print(turn)
+    # for v in theaters.values():
+    #     print(f'{v.theater} is available {v.available}')
+    # print(turn)
 
 
 if __name__ == '__main__':
