@@ -21,7 +21,7 @@ surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA) # need 
 clock = pygame.time.Clock()
 
 '''
-A little more text on screen for what to do - closed theater (any more?)
+A little more text on screen for what to do - any other context for tokens - maybe last token played?
 
 can play tokens instead of finishing out the theater when closed by track points 
     check this again - maybe fixed - pay attention to it
@@ -204,7 +204,7 @@ def main():
     closed_theater = False
     strategic = False
     result = None
-    result_displayed = False
+    closed_theater_action = None
     while run:
         screen.fill(ESPRESSO)
         screen.blit(board, (0,0))
@@ -246,7 +246,7 @@ def main():
         if between_turns and not result and not closed_theater:
             begin_turn_button.draw(screen, turn)
         elif not between_turns and not result and not closed_theater:
-            turn_text = f'{turn.title()} commander, deploy a unit...'
+            turn_text = f'{turn.title()} commander, deploy a unit'
             text_on_screen(turn_text, 10, 770)
             # turn_text = font.render(f'{turn.title()} commander, deploy a unit...', True, 'white')
             # turn_text_rect = turn_text.get_rect()
@@ -284,8 +284,31 @@ def main():
             # screen.blit(blitz_text, blitz_text_rect)
 
         if closed_theater and not strategic:
-            closed_theater_text = 'Theater closed - select all other battle spaces (except blank or strategic advantage)'
+            closed_theater_text = 'Theater closed - select all other battle spaces (except blank or strategic advantage).'
             text_on_screen(closed_theater_text, 10, 770)
+
+        if closed_theater and closed_theater_action and not strategic:
+            if closed_theater_action == 'propaganda':
+                closed_theater_action_text = 'Propaganda earned you victory points!'
+                text_on_screen(closed_theater_action_text, 700, 770)
+            elif closed_theater_action == 'production':
+                closed_theater_action_text = 'New unit available!'
+                text_on_screen(closed_theater_action_text, 700, 770)
+            elif closed_theater_action == 'imp_prduction':
+                closed_theater_action_text = '2 new units available!'
+                text_on_screen(closed_theater_action_text, 700, 770)
+            elif closed_theater_action == 'bombing':
+                closed_theater_action_text = 'You bombed an opponent\'s unit!'
+                text_on_screen(closed_theater_action_text, 700, 770)
+            elif closed_theater_action == 'research':
+                closed_theater_action_text = 'Researched a special unit!'
+                text_on_screen(closed_theater_action_text, 700, 770)
+            elif closed_theater_action == 'imp_research':
+                closed_theater_action_text = 'Researched 2 new special units!'
+                text_on_screen(closed_theater_action_text, 700, 770)
+            elif closed_theater_action == 'res_industry':
+                closed_theater_action_text = 'New special unit available!'
+                text_on_screen(closed_theater_action_text, 700, 770)
 
 
         for event in pygame.event.get():
@@ -315,6 +338,13 @@ def main():
 
 
             elif event.type == pygame.MOUSEBUTTONUP:
+
+                # closes if game over and click
+                if result:
+                    run = False
+
+                if closed_theater_action:
+                    closed_theater_action = None
 
                 if begin_turn_button.rect.collidepoint(pos) and between_turns:
                     between_turns = False
@@ -397,7 +427,7 @@ def main():
                                         break
                                 else:
                                     print('pick a theater')
-                        print('Theater closed - select all other battle spaces (except blank or strategic advantage)')
+                        # print('Theater closed - select all other battle spaces (except blank or strategic advantage)')
                         # clickable_spaces = len(available_list)
                         # count = 0
                         # for i in range()
@@ -443,6 +473,7 @@ def main():
                                     strategic = True
                                     available_list.remove(battle_space)
                                     battle_space.occupied = True
+                                closed_theater_action = battle_space.effect
                                 occupied_list = []
                                 for space in battle_space.campaign.spaces:
                                     for item in space.campaign.spaces:
@@ -581,6 +612,7 @@ def main():
                                     strategic = True
                                     available_list.remove(battle_space)
                                     battle_space.occupied = True
+                                closed_theater_action = battle_space.effect
                                 occupied_list = []
                                 for space in battle_space.campaign.spaces:
                                     for item in space.campaign.spaces:
@@ -648,9 +680,6 @@ def main():
 
         clock.tick(60)
 
-        if result_displayed:
-            pygame.time.delay(30000)
-            run = False
 
     # for token in allied_hand.hand_list:
     #     print(token.rect)
