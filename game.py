@@ -243,9 +243,9 @@ def main():
         # text_rect.y = 770
         # screen.blit(text, text_rect)
         # pygame.time.delay(5000)
-        if between_turns and not result:
+        if between_turns and not result and not closed_theater:
             begin_turn_button.draw(screen, turn)
-        elif not between_turns and not result:
+        elif not between_turns and not result and not closed_theater:
             turn_text = f'{turn.title()} commander, deploy a unit...'
             text_on_screen(turn_text, 10, 770)
             # turn_text = font.render(f'{turn.title()} commander, deploy a unit...', True, 'white')
@@ -282,6 +282,10 @@ def main():
             blitz_text = 'Blitzed the enemy. Play another token.'
             text_on_screen(blitz_text, 700, 770)
             # screen.blit(blitz_text, blitz_text_rect)
+
+        if closed_theater and not strategic:
+            closed_theater_text = 'Theater closed - select all other battle spaces (except blank or strategic advantage)'
+            text_on_screen(closed_theater_text, 10, 770)
 
 
         for event in pygame.event.get():
