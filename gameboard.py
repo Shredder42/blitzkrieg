@@ -559,6 +559,43 @@ class GameBoard:
                         self.allied_symbol_rect = pygame.Rect(41, 97, 12, 12)
         print(f'axis {self.axis_victory_points}: allied {self.allied_victory_points}')
 
+    def execute_closed_theater_spaces(self, battle_space, turn, available_list, player_hand, opponent_hand, player_bag, opponent_bag, research_bag, strategic):
+        if battle_space.effect == 'propaganda':
+            for i in range(battle_space.effect_value):
+                self.propaganda(turn)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'production':
+            self.industrial_production(player_hand)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'imp_production':
+            for i in range(battle_space.effect_value):
+                self.industrial_production(player_hand)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'bombing':
+            self.bombing(opponent_hand, opponent_bag)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'research':
+            self.research(player_bag, research_bag)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'imp_research':
+            for i in range(battle_space.effect_value):
+                self.research(player_bag, research_bag)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'res_industry':
+            self.research_industry(player_hand, research_bag, turn)
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        elif battle_space.effect == 'strategic': 
+            strategic = True
+            available_list.remove(battle_space)
+            battle_space.occupied = True
+        return available_list, strategic
 
 
 
