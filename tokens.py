@@ -125,10 +125,10 @@ class Token:
                     if space.effect == 'bombing':
                         board.bombing(opponent_hand, opponent_bag)
                     if space.effect == 'research':
-                        board.research(player_bag, research_bag)
+                        board.research(player_bag, research_bag, turn)
                     if space.effect == 'imp_research':
                         for i in range(space.effect_value):
-                            board.research(player_bag, research_bag)
+                            board.research(player_bag, research_bag, turn)
                     if space.effect == 'res_industry':
                         board.research_industry(player_hand, research_bag, turn)
                 # try to make this a function and careful with variable names - probs in campaign

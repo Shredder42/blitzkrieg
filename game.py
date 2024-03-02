@@ -132,7 +132,6 @@ def check_for_victory_points(game_board):
     return winner
 
 # keep looking at this function
-# also need to lose the game if hand is empty - this might already work
 def check_for_victory_availabilty(game_board, hand):
     available_list = []
     available_move = True
@@ -191,6 +190,7 @@ def main():
     strategic = False
     result = None
     closed_theater_action = None
+    show_tokens = []
     while run:
         screen.fill(ESPRESSO)
         screen.blit(board, (0,0))
@@ -227,6 +227,25 @@ def main():
         # pygame.time.delay(5000)
         if between_turns and not result and not closed_theater:
             begin_turn_button.draw(screen, turn)
+            # print(game_board.placed_tokens[-1].side, game_board.placed_tokens[-1].value, game_board.placed_tokens[-1].effect)
+            # show_tokens = []
+            if len(game_board.placed_tokens) > 1:
+                if turn == 'axis':
+                    text_on_screen('Units deployed by Allied commander:', 10, 770)
+                else:
+                    text_on_screen('Units deployed by Axis commander:', 10, 770)
+                for token, space in zip(reversed(game_board.placed_tokens), reversed(game_board.played_spaces)):
+                    if token.side and token.side != turn:
+                        if not token.effect:
+                            last_played_text = f'{token.unit.title()} {token.value} on a {space.effect.title()} space in the {space.theater.theater.title()} theater.'
+                        else:
+                            last_played_text = f'{token.effect.title()} {token.unit.title()} {token.value} on a {space.effect.title()} space in the {space.theater.theater.title()} theater.'
+                        show_tokens.append(last_played_text)
+                    else:
+                        break
+            for i, text in enumerate(reversed(show_tokens)):
+                text_on_screen(text, 10, 790+20*i)
+            show_tokens = []
         elif not between_turns and not result and not closed_theater:
             turn_text = f'{turn.title()} commander, deploy a unit'
             text_on_screen(turn_text, 10, 770)
@@ -616,8 +635,8 @@ def main():
     print('axis victory points:', game_board.axis_victory_points)
     print('allied victory points:', game_board.allied_victory_points)
     # print('axis bag size', len(bags.axis_token_bag))
-    # for token in bags.axis_token_bag:
-    #     print(token.effect, token.value, token.special)
+    for token in bags.axis_token_bag:
+        print(token.effect, token.value, token.special)
 
 
 

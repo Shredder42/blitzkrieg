@@ -439,14 +439,26 @@ class GameBoard:
         print('Bombed an opponent\'s unit!')
         
 
-    def research(self, player_bag, research_bag):
-        player_bag.append(research_bag.pop())
+    def research(self, player_bag, research_bag, turn):
+        drawn_token = research_bag.pop()
+        if turn == 'axis':
+            drawn_token.side = 'axis'
+        else:
+            drawn_token.side = 'allied'
+        player_bag.append(drawn_token)
+        # player_bag.append(research_bag.pop())
         random.shuffle(player_bag)
         random.shuffle(research_bag)
         print('Researched special unit!')
 
     def research_industry(self, hand, research_bag, turn):
-        hand.hand_list.append(research_bag.pop())  
+        drawn_token = research_bag.pop()
+        if turn == 'axis':
+            drawn_token.side = 'axis'
+        else:
+            drawn_token.side = 'allied'
+        hand.hand_list.append(drawn_token)
+        # hand.hand_list.append(research_bag.pop())  
         # if turn == 'axis':
         #     y = 840          
         # elif turn == 'allied':
@@ -579,12 +591,12 @@ class GameBoard:
             available_list.remove(battle_space)
             battle_space.occupied = True
         elif battle_space.effect == 'research':
-            self.research(player_bag, research_bag)
+            self.research(player_bag, research_bag, turn)
             available_list.remove(battle_space)
             battle_space.occupied = True
         elif battle_space.effect == 'imp_research':
             for i in range(battle_space.effect_value):
-                self.research(player_bag, research_bag)
+                self.research(player_bag, research_bag, turn)
             available_list.remove(battle_space)
             battle_space.occupied = True
         elif battle_space.effect == 'res_industry':
