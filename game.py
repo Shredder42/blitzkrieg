@@ -22,7 +22,8 @@ clock = pygame.time.Clock()
 
 '''
 A little more text on screen for what to do - any other context for tokens - maybe last token played?
-
+FIRST CLICK ON NEW TURN CAN END THE TURN - DOESN'T OCCUR IF FIRST CLICK IS ON A TOKEN - may have fixed this but pay attention
+created function for selecting closed theater spaces - pay attention and make sure it still works
 can play tokens instead of finishing out the theater when closed by track points 
     check this again - maybe fixed - pay attention to it
 strategic when clicked on closed theater it went to next turn - only do end_turn if clicked theater is valid
@@ -372,7 +373,7 @@ def main():
                         else:
                             if not blitz and not closed_theater:
                                 turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
-
+                                played_space = None
                             elif blitz and not closed_theater:
                                 print('place another token')
 
@@ -511,6 +512,7 @@ def main():
                         else:
                             if not blitz and not closed_theater:
                                 turn, played_space, between_turns, result = end_turn(turn, played_space, game_board, axis_hand, allied_hand)
+                                played_space = None
                             elif blitz and not closed_theater:
                                 print('place another token')
                     elif played_space and not closed_theater:
@@ -613,9 +615,9 @@ def main():
 
     print('axis victory points:', game_board.axis_victory_points)
     print('allied victory points:', game_board.allied_victory_points)
-    print('axis bag size', len(bags.axis_token_bag))
-    for token in bags.axis_token_bag:
-        print(token.effect, token.value, token.special)
+    # print('axis bag size', len(bags.axis_token_bag))
+    # for token in bags.axis_token_bag:
+    #     print(token.effect, token.value, token.special)
 
 
 
