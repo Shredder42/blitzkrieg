@@ -62,7 +62,6 @@ class Campaign:
         self.available = available
         self.complete = False
         self.spaces = []
-        # self.battle_spaces = self.create_battle_spaces2()
 
     def add_spaces_to_campaign(self, game_board):
         if self.campaign == 'northern_west_europe':
@@ -104,23 +103,6 @@ class Campaign:
         elif self.campaign == 'southern_asia':
             for space in game_board.battle_spaces[38:]:
                 self.spaces.append(space)
-    # def create_battle_spaces2(self):
-    #     spaces = []
-    #     if self.campaign == 'west_europe_1':
-    #         spaces.append(BattleSpace2(196, 207, 'production', 1, 'sea'))
-    #         spaces.append(BattleSpace2(258, 207, 'research', 1, 'land')        self.track_markers)
-    #         spaces.append(BattleSpace2(320, 207, 'propaganda', 1,  'both'))
-    #     return spaces
-    # def close_campaign(self, game_board, turn):
-    #     occupied_list = []
-    #     for space in self.spaces:
-    #         occupied_list.append(space.occupied)
-    #     if all(occupied_list):
-    #         for i in range(self.victory_points):
-    #             game_board.propaganda(turn)
-
-
-
 
 
 class Theater:
@@ -165,7 +147,6 @@ class Theater:
         return track_marker
         
     def move_track_marker(self, value, turn):
-        # self.theater_score += token_value
         if self.theater_score > -14 and self.theater_score < 14: # put this in with each set of theaters (i.e. not over africa & asia)
             for i in range(value):
                 if turn == 'axis':
@@ -177,8 +158,6 @@ class Theater:
                             self.score_track_x += 20
                         elif self.theater_score <= 14:
                             self.score_track_y += 20
-                        # if self.theater_score == 14:
-                        #     self.available = False # closes theathers
                     elif self.theater in ('africa', 'asia'):
                         if self.theater_score <= -9:
                             self.score_track_y -= 20
@@ -186,8 +165,7 @@ class Theater:
                             self.score_track_x += 20
                         elif self.theater_score >= 10 and self.theater_score < 12:
                             self.score_track_y += 20
-                        # if self.theater_score == 11:
-                        #     self.available = False # closes theather
+
                 elif turn == 'allied':
                     self.theater_score -= 1
                     if self.theater in ('west_europe', 'pacific', 'east_europe'):
@@ -197,8 +175,7 @@ class Theater:
                             self.score_track_x -= 20
                         elif self.theater_score >= -14:
                             self.score_track_y += 20
-                        # if self.theater_score == -14:
-                        #     self.available = False # closes theather
+
                     elif self.theater in ('africa', 'asia'):
                         if self.theater_score >= 9:
                             self.score_track_y -= 20    
@@ -206,13 +183,11 @@ class Theater:
                             self.score_track_x -= 20
                         elif self.theater_score <= -10 and self.theater_score > -12:
                             self.score_track_y += 20
-                        # if self.theater_score == -11:
-                        #     self.available = False # closes theather
+
 
         print('theater score:', self.theater_score)
 
     def move_track_marker_nuclear(self, theaters, turn):
-        # print(type(theaters))
         for i in range(2):
             if turn == 'axis':
                 for k, v in theaters.items():                
@@ -264,7 +239,6 @@ class Theater:
                     print(k, v.theater_score)
     
     def move_track_marker_strategic(self, theaters, space_value, selected_theater, turn):
-        # print('ran move track marker strategic')
         for k, v in theaters.items():   
             if k != self.theater and k == selected_theater and v.available:
                 for i in range(space_value):
@@ -446,7 +420,6 @@ class GameBoard:
         else:
             drawn_token.side = 'allied'
         player_bag.append(drawn_token)
-        # player_bag.append(research_bag.pop())
         random.shuffle(player_bag)
         random.shuffle(research_bag)
         print('Researched special unit!')
@@ -458,11 +431,6 @@ class GameBoard:
         else:
             drawn_token.side = 'allied'
         hand.hand_list.append(drawn_token)
-        # hand.hand_list.append(research_bag.pop())  
-        # if turn == 'axis':
-        #     y = 840          
-        # elif turn == 'allied':
-        #     y = 770
         y = 800
         for i, token in enumerate((hand.hand_list)):
             x = 25 + i * 60
@@ -609,19 +577,6 @@ class GameBoard:
             battle_space.occupied = True
         return available_list, strategic
 
-
-
-
-
-        
-    # def create_theaters(self):
-    #     theaters = {}
-    #     theaters['west_europe'] = Theater('west_europe')
-    #     theaters['pacific'] = Theater('pacific')
-    #     theaters['east_europe'] = Theater('east_europe')
-    #     theaters['africa'] = Theater('africa')
-    #     theaters['asia'] = Theater('asia')
-    #     return theaters
 
 if __name__ == '__main__':
     # northern_west_europe = Campaign('northern_west_europe')
